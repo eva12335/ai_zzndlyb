@@ -103,7 +103,7 @@ const DIM_ACTIONS: Record<string, { action: string; impact: string }> = {
 // ═══════════════════════════════════════════
 
 function buildFallbackReport(input: AiReportInput): AiReportOutput {
-  const { dimensionScores, segmentLabel, costData } = input;
+  const { dimensionScores, segmentLabel } = input;
 
   // 找最低分 3 个维度
   const ranked = DIMENSION_NAMES
@@ -120,7 +120,7 @@ function buildFallbackReport(input: AiReportInput): AiReportOutput {
       dimension: item.dim,
       currentScore: item.score,
       targetScore: Math.min(item.score + 2, 10),
-      financialImpact: costData ? undefined : undefined,
+      financialImpact: undefined,
       directionGuide: description || `建议优先提升${item.dim}——这是 ROI 最高的改进方向`,
       roiRank: i + 1,
     };
@@ -178,12 +178,10 @@ export function useAiReport(): UseAiReportReturn {
       if (validateAiReport(result, input.segmentLabel, hasCostData)) {
         setReport(result);
       } else {
-        // 校验失败 → 降级
         setReport(buildFallbackReport(input));
         setIsFallback(true);
       }
     } catch {
-      // 网络/超时 → 降级
       setReport(buildFallbackReport(input));
       setIsFallback(true);
     } finally {

@@ -28,9 +28,10 @@ export default function TabBar() {
     Taro.switchTab({ url: path });
   };
 
+  // position:absolute 依赖 app.tsx phone-frame 的 position:relative
   return (
     <View style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9999,
+      position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 9999,
       display: 'flex', background: 'rgba(255,255,255,0.95)',
       backdropFilter: 'blur(20px)', borderTop: '1px solid #edeff3',
       paddingBottom: 'env(safe-area-inset-bottom)',

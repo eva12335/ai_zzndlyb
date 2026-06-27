@@ -52,7 +52,7 @@ export default function SegmentCard({ result, onGenerateReport }: Props) {
           🧭 你的画像标签：{result.segment}
         </Text>
         <Text style={{
-          fontSize: '12px', color: 'var(--text-body)', lineHeight: '20px',
+          fontSize: '12px', color: 'var(--text-body)', lineHeight: '18px',
         }}>
           {interpretation}
         </Text>

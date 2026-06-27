@@ -178,7 +178,7 @@ export default function TierBreakdown({ result }: Props) {
             {paragraph && (
               <Text style={{
                 fontSize: FS.label, color: 'var(--text-body)',
-                lineHeight: '22px', display: 'block',
+                lineHeight: '18px', display: 'block',
               }}
               >
                 {paragraph}

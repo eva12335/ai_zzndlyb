@@ -11,6 +11,26 @@ interface QuestionCardProps {
   onSelect: (choice: 'A' | 'B') => void;
 }
 
+const CHECK_STYLE = {
+  position: 'absolute' as const, top: '8px', right: '10px', width: '18px', height: '18px',
+  borderRadius: '50%', background: 'var(--gold)', color: '#fff',
+  fontSize: '12px', display: 'flex', alignItems: 'center' as const, justifyContent: 'center' as const,
+};
+
+function columnStyle(side: 'A' | 'B', selected: 'A' | 'B' | null) {
+  const isSel = selected === side;
+  return {
+    flex: 1, padding: '14px', borderRadius: '12px',
+    border: isSel ? '2px solid var(--gold)' : '1.5px solid var(--border-subtle)',
+    background: isSel ? 'var(--gold-light)' : 'var(--surface)',
+    boxShadow: isSel ? '0 0 0 3px var(--gold-light)' : 'var(--shadow-xs)',
+    fontSize: '16px', color: 'var(--text-body)', lineHeight: 1.7,
+    position: 'relative' as const,
+    marginRight: side === 'A' ? '4px' : 0,
+    marginLeft: side === 'B' ? '4px' : 0,
+  };
+}
+
 export default function QuestionCard({ question, selected, onSelect }: QuestionCardProps) {
   return (
     <View style={{
@@ -25,53 +45,21 @@ export default function QuestionCard({ question, selected, onSelect }: QuestionC
         {question.dimension} · 第 {question.dimIndex}/5 题
       </View>
 
-      <View style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '8px', alignItems: 'start' }}>
-        <View
-          onClick={() => onSelect('A')}
-          style={{
-            padding: '14px', borderRadius: '12px',
-            border: selected === 'A' ? '2px solid var(--gold)' : '1.5px solid var(--border-subtle)',
-            background: selected === 'A' ? 'var(--gold-light)' : 'var(--surface)',
-            boxShadow: selected === 'A' ? '0 0 0 3px var(--gold-light)' : 'var(--shadow-xs)',
-            fontSize: FS.heading, color: 'var(--text-body)', lineHeight: 1.7,
-            position: 'relative',
-          }}
-        >
+      <View style={{ display: 'flex', alignItems: 'flex-start' }}>
+        <View onClick={() => onSelect('A')} style={columnStyle('A', selected)}>
           <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'A' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>A 栏</Text>
           <Text>{question.statementA}</Text>
-          {selected === 'A' && (
-            <View style={{
-              position: 'absolute', top: '8px', right: '10px', width: '18px', height: '18px',
-              borderRadius: '50%', background: 'var(--gold)', color: '#fff',
-              fontSize: FS.caption, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>✓</View>
-          )}
+          {selected === 'A' && <View style={CHECK_STYLE}>✓</View>}
         </View>
 
-        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '8px' }}>
+        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', paddingTop: '8px', flexShrink: 0 }}>
           <Text style={{ fontSize: FS.label, fontWeight: 700, color: 'var(--text-muted)' }}>VS</Text>
         </View>
 
-        <View
-          onClick={() => onSelect('B')}
-          style={{
-            padding: '14px', borderRadius: '12px',
-            border: selected === 'B' ? '2px solid var(--gold)' : '1.5px solid var(--border-subtle)',
-            background: selected === 'B' ? 'var(--gold-light)' : 'var(--surface)',
-            boxShadow: selected === 'B' ? '0 0 0 3px var(--gold-light)' : 'var(--shadow-xs)',
-            fontSize: FS.heading, color: 'var(--text-body)', lineHeight: 1.7,
-            position: 'relative',
-          }}
-        >
-          <Text style={{ fontSize: '10px', fontWeight: 700, color: selected === 'B' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>B 栏</Text>
+        <View onClick={() => onSelect('B')} style={columnStyle('B', selected)}>
+          <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'B' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>B 栏</Text>
           <Text>{question.statementB}</Text>
-          {selected === 'B' && (
-            <View style={{
-              position: 'absolute', top: '8px', right: '10px', width: '18px', height: '18px',
-              borderRadius: '50%', background: 'var(--gold)', color: '#fff',
-              fontSize: FS.caption, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>✓</View>
-          )}
+          {selected === 'B' && <View style={CHECK_STYLE}>✓</View>}
         </View>
       </View>
     </View>

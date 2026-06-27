@@ -32,9 +32,9 @@ export default function AssessmentPage() {
   const answers = useAssessmentStore((s) => s.answers);
   const result = useAssessmentStore((s) => s.result);
   const answer = useAssessmentStore((s) => s.answerQuestion);
-  const next = useAssessmentStore((s) => s.nextQuestion);
-  const prev = useAssessmentStore((s) => s.prevQuestion);
-  const submit = useAssessmentStore((s) => s.submitAssessment);
+  const next = () => useAssessmentStore.getState().nextQuestion();
+  const prev = () => useAssessmentStore.getState().prevQuestion();
+  const submit = () => useAssessmentStore.getState().submitAssessment();
   const start = useAssessmentStore((s) => s.startAssessment);
   const projectStore = useProjectStore();
   const { loading, error, report, isFallback, generateReport } = useAiReport();
@@ -132,26 +132,46 @@ export default function AssessmentPage() {
       />
       <View style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
         <View
-          onClick={idx > 0 ? prev : undefined}
           style={{ ...btnBase, background: 'var(--surface)', color: idx > 0 ? 'var(--text-body)' : 'var(--text-muted)', border: '1px solid var(--border)' }}
+          onClick={idx > 0 ? prev : undefined}
         >
-          {t('assessment.prev')}
+          <Text>{t('assessment.prev')}</Text>
         </View>
         {idx < QUESTION_BANK.length - 1 ? (
           hasAnswered ? (
-            <View onClick={next} style={{ ...btnBase, background: '#162340', color: '#f0ece4' }}>{t('assessment.next')}</View>
+            <NavButton label={t('assessment.next')} onTap={next} variant="next" />
           ) : (
-            <View style={{ ...btnBase, background: 'var(--border-subtle)', color: 'var(--text-muted)' }}>请先选择 A 或 B</View>
+            <View style={{ ...btnBase, background: 'var(--border-subtle)', color: 'var(--text-muted)' }}>
+              <Text>请先选择 A 或 B</Text>
+            </View>
           )
         ) : (
           allAnswered ? (
-            <View onClick={submit} style={{ ...btnBase, background: '#C5A059', color: '#fff' }}>提交测评 ({answeredCount}/{QUESTION_BANK.length})</View>
+            <NavButton label={`提交测评 (${answeredCount}/${QUESTION_BANK.length})`} onTap={submit} variant="submit" />
           ) : (
-            <View style={{ ...btnBase, background: 'var(--border-subtle)', color: 'var(--text-muted)' }}>还有 {QUESTION_BANK.length - answeredCount} 题未答</View>
+            <View style={{ ...btnBase, background: 'var(--border-subtle)', color: 'var(--text-muted)' }}>
+              <Text>还有 {QUESTION_BANK.length - answeredCount} 题未答</Text>
+            </View>
           )
         )}
       </View>
       <TabBar />
+    </View>
+  );
+}
+
+/** 导航按钮子组件 — H5 兼容：隔离在子组件内确保 onClick 正常触发 */
+function NavButton({ label, onTap, variant }: { label: string; onTap: () => void; variant: 'next' | 'submit' }) {
+  return (
+    <View
+      onClick={onTap}
+      style={{
+        ...btnBase,
+        background: variant === 'next' ? 'var(--navy-deep)' : 'var(--gold)',
+        color: '#fff',
+      }}
+    >
+      <Text>{label}</Text>
     </View>
   );
 }

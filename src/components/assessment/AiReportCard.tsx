@@ -115,7 +115,7 @@ export default function AiReportCard({ report, segmentLabel, isFallback, loading
         }}>
           🧭 为什么你是"{segmentLabel}"
         </Text>
-        <Text style={{ fontSize: '12px', color: '#3a4056', lineHeight: '24px' }}>
+        <Text style={{ fontSize: '12px', color: '#3a4056', lineHeight: '18px' }}>
           {report.segmentAnalysis}
         </Text>
       </View>
@@ -191,7 +191,7 @@ export default function AiReportCard({ report, segmentLabel, isFallback, loading
               <Text style={{ fontSize: '10px', fontWeight: 800, color: '#fff' }}>{i + 1}</Text>
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: '11px', color: '#3a4056', lineHeight: '20px' }}>
+              <Text style={{ fontSize: '11px', color: '#3a4056', lineHeight: '16px' }}>
                 {item.action}
               </Text>
               <Text style={{ fontSize: '9px', color: '#9298a8', marginTop: '2px', display: 'block' }}>
@@ -247,7 +247,7 @@ export default function AiReportCard({ report, segmentLabel, isFallback, loading
               填入成本数据，解锁完整路线图
             </Text>
             <Text style={{
-              fontSize: '11px', color: '#9298a8', lineHeight: '20px', marginBottom: '12px',
+              fontSize: '11px', color: '#9298a8', lineHeight: '16px', marginBottom: '12px',
             }}>
               在 ROI 利润分析中填写你的成本、定价和销量{'\n'}AI 将生成：3/6/12 个月目标 + 预期财务变化
             </Text>
