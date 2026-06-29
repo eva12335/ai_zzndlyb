@@ -1,6 +1,7 @@
 {
   "miniprogramRoot": ".",
-  "cloudfunctionRoot": "cloudfunctions/",
+  "cloudfunctionRoot": "cloudfunctions",
+  "cloud": true,
   "projectname": "一人公司罗盘",
   "description": "",
   "appid": "wxb121060f901832ea",
