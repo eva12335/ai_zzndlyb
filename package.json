@@ -8,7 +8,7 @@
     "app-id": ""
   },
   "scripts": {
-    "build": "pnpm build:weapp && mkdir -p /mnt/c/Users/Public/ai_zzndlyb_dist && cp -r dist/* /mnt/c/Users/Public/ai_zzndlyb_dist/",
+    "build": "pnpm build:weapp && mkdir -p /mnt/c/Users/Public/ai_zzndlyb_dist && cp -r dist/* /mnt/c/Users/Public/ai_zzndlyb_dist/ && cp project.config.build.json /mnt/c/Users/Public/ai_zzndlyb_dist/project.config.json && cp -r cloudfunctions /mnt/c/Users/Public/ai_zzndlyb_dist/",
     "build:weapp": "taro build --type weapp",
     "build:web": "taro build --type h5",
     "dev": "pnpm dev:web",

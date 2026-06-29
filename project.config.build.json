@@ -1,0 +1,17 @@
+{
+  "miniprogramRoot": ".",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "projectname": "一人公司罗盘",
+  "description": "",
+  "appid": "wxb121060f901832ea",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "minified": true,
+    "minifyWXSS": true,
+    "minifyWXML": true
+  },
+  "compileType": "miniprogram",
+  "condition": {}
+}
