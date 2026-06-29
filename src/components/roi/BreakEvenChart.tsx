@@ -225,10 +225,12 @@ export default function BreakEvenChart({
       >
         盈亏平衡分析
       </Text>
-      <Canvas
-        canvasId={CANVAS_ID}
-        style={{ width: `${W}px`, height: `${H}px`, margin: '0 auto', display: 'block', maxWidth: '100%' }}
-      />
+      <View style={{ display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
+        <Canvas
+          canvasId={CANVAS_ID}
+          style={{ width: `${W}px`, height: `${H}px`, display: 'block', flexShrink: 0 }}
+        />
+      </View>
       {projection && projection.breakEvenMonth != null && (
         <Text style={{
           display: 'block', marginTop: '6px', fontSize: '13px',
