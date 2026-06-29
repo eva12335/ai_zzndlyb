@@ -17,11 +17,13 @@ export default function ProjectNameCard() {
       padding: '16px',
       border: '1px solid #edeff3',
       marginBottom: '12px',
-    }}>
+    }}
+    >
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '10px',
-      }}>
+      }}
+      >
         {t('roi.project_name_title')}
       </Text>
       <View style={{ position: 'relative' }}>
@@ -38,7 +40,8 @@ export default function ProjectNameCard() {
         <Text style={{
           position: 'absolute', right: '12px', top: '9px',
           fontSize: '12px', color: '#d47563', fontWeight: 700,
-        }}>
+        }}
+        >
           {t('roi.label_required')}
         </Text>
       </View>

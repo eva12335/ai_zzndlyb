@@ -31,11 +31,13 @@ export default function CostStructureCard() {
       background: '#ffffff',
       borderRadius: '16px', padding: '16px',
       border: '1px solid #edeff3', marginBottom: '12px',
-    }}>
+    }}
+    >
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '12px',
-      }}>
+      }}
+      >
         {t('roi.cost_structure_title')}
       </Text>
 

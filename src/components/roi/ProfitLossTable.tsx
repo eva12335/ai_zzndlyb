@@ -22,7 +22,7 @@ function fmtPct(v: Decimal): string {
 }
 
 export default function ProfitLossTable({ profitLoss, startupCapital }: Props) {
-  const { rows, taxDetail, netProfit } = profitLoss;
+  const { rows, netProfit } = profitLoss;
 
   // 回收期
   const hasStartup = startupCapital.gt(0);
@@ -113,7 +113,8 @@ export default function ProfitLossTable({ profitLoss, startupCapital }: Props) {
             : 'rgba(212,117,99,0.04)',
           borderRadius: '8px',
           borderLeft: '3px solid ' + paybackColor,
-        }}>
+        }}
+        >
           <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={{ fontSize: FS.caption, color: 'var(--text-muted)' }}>回收期</Text>
             <Text style={{ fontSize: FS.caption, fontWeight: 700, color: paybackColor }}>
@@ -124,7 +125,8 @@ export default function ProfitLossTable({ profitLoss, startupCapital }: Props) {
             <Text style={{
               fontSize: '10px', color: paybackColor, fontWeight: 500,
               display: 'block', marginTop: '4px',
-            }}>
+            }}
+            >
               {paybackHint}
             </Text>
           )}

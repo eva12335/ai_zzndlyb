@@ -3,7 +3,7 @@
  * 来源：PRD §8 分享与导出
  */
 import Taro from '@tarojs/taro';
-import type { ProfitLossOutput, CashFlowOutput, BreakEvenOutput } from '../types/calculation';
+import type { ProfitLossOutput, CashFlowOutput } from '../types/calculation';
 import type { AssessmentResult } from '../types/assessment';
 
 // ═══════════════════════════════════════════

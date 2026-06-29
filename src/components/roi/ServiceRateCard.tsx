@@ -48,11 +48,13 @@ export default function ServiceRateCard({ breakEvenHourlyRate, requiredPrice }: 
       background: '#ffffff',
       borderRadius: '16px', padding: '16px',
       border: '1px solid #edeff3', marginBottom: '12px',
-    }}>
+    }}
+    >
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '12px',
-      }}>
+      }}
+      >
         {t('roi.service_rate_title')}
       </Text>
 
@@ -72,7 +74,8 @@ export default function ServiceRateCard({ breakEvenHourlyRate, requiredPrice }: 
         <Text style={{
           position: 'absolute', right: '12px', top: '9px',
           fontSize: '12px', color: '#C5A059', fontWeight: 500,
-        }}>
+        }}
+        >
           {t('roi.service_rate_unit_month')}
         </Text>
       </View>
@@ -85,16 +88,14 @@ export default function ServiceRateCard({ breakEvenHourlyRate, requiredPrice }: 
               padding: '10px 12px', borderRadius: '8px',
               background: 'rgba(197,160,89,0.04)', marginBottom: '8px',
               borderLeft: '3px solid #C5A059',
-            }}>
+            }}
+            >
               <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>{t('roi.service_rate_historical')}</Text>
                 <Text style={{ fontSize: FS.caption, fontWeight: 700, color: '#C5A059' }}>
                   ¥{historicalHourlyRate.toLocaleString()}/h
                 </Text>
               </View>
-              <Text style={{ fontSize: '10px', color: '#9298a8', marginTop: '2px', display: 'block' }}>
-                ¥{historicalMonthlySalary.toLocaleString()} {t('roi.service_rate_historical_derivation')}
-              </Text>
             </View>
           )}
 
@@ -104,41 +105,55 @@ export default function ServiceRateCard({ breakEvenHourlyRate, requiredPrice }: 
               padding: '10px 12px', borderRadius: '8px',
               background: 'rgba(74,156,124,0.04)', marginBottom: '8px',
               borderLeft: '3px solid #4a9c7c',
-            }}>
+            }}
+            >
               <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>{t('roi.service_rate_breakeven')}</Text>
                 <Text style={{ fontSize: FS.caption, fontWeight: 700, color: '#4a9c7c' }}>
                   ¥{breakEvenRate.toLocaleString()}/h
                 </Text>
               </View>
-              <Text style={{ fontSize: '10px', color: '#9298a8', marginTop: '2px', display: 'block' }}>
-                {t('roi.service_rate_breakeven_desc')}
-              </Text>
             </View>
           )}
 
-          {/* 目标利润时薪（系统计算） */}
+          {/* 利润目标下限时薪（系统计算） */}
           <View style={{
             padding: '10px 12px', borderRadius: '8px',
             background: 'rgba(125,108,172,0.04)', marginBottom: '8px',
             borderLeft: '3px solid #7d6cac',
-          }}>
+          }}
+          >
             <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>{t('roi.service_rate_target')}</Text>
               <Text style={{ fontSize: FS.caption, fontWeight: 700, color: '#7d6cac' }}>
                 {targetRate ? `¥${targetRate.toLocaleString()}/h` : t('roi.service_rate_target_locked')}
               </Text>
             </View>
-            <Text style={{ fontSize: '10px', color: '#9298a8', marginTop: '2px', display: 'block' }}>
-              {targetRate ? t('roi.service_rate_target_desc') : t('roi.service_rate_target_hint')}
-            </Text>
           </View>
+
+          {/* 建议报价区间（历史时薪 × 2.5~3） */}
+          {historicalHourlyRate && (
+            <View style={{
+              padding: '10px 12px', borderRadius: '8px',
+              background: 'rgba(22,35,64,0.04)', marginBottom: '8px',
+              borderLeft: '3px solid #162340',
+            }}
+            >
+              <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>建议报价</Text>
+                <Text style={{ fontSize: FS.caption, fontWeight: 700, color: '#162340' }}>
+                  ¥{Math.round(historicalHourlyRate * 2.5)}-{Math.round(historicalHourlyRate * 3)}/h
+                </Text>
+              </View>
+            </View>
+          )}
 
           {/* 底部提示 */}
           <Text style={{
             fontSize: '10px', color: '#9298a8', lineHeight: 1.5,
             display: 'block', marginTop: '4px',
-          }}>
+          }}
+          >
             {t('roi.service_rate_footer')}
           </Text>
         </>
@@ -146,7 +161,8 @@ export default function ServiceRateCard({ breakEvenHourlyRate, requiredPrice }: 
         <Text style={{
           fontSize: FS.caption, color: '#9298a8',
           display: 'block', textAlign: 'center', padding: '16px 0',
-        }}>
+        }}
+        >
           {t('roi.service_rate_empty')}
         </Text>
       )}

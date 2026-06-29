@@ -9,9 +9,24 @@ import type { DimensionScores } from '../../types/assessment';
 
 const W = 300; const H = 280;
 const CX = W / 2; const CY = 130;
-const MAX_R = 100;
+const MAX_R = 95;
 const N = DIMENSION_NAMES.length;
 const LEVELS = [2, 4, 6, 8, 10];
+
+// 雷达图专用缩写标签（≤4字）
+const RADAR_LABELS: Record<string, string> = {
+  '创办OPC的动机': '动机',
+  '风险承受能力': '风险承受',
+  '坚韧不拔/处理危机能力': '坚韧力',
+  '主动性': '主动性',
+  '协调家庭·社会·OPC关系的能力': '家庭平衡',
+  '决策能力': '决策力',
+  '适应OPC需要的能力': '适应力',
+  '对OPC的承诺': '承诺',
+  '家庭支持': '家庭支持',
+  '谈判技巧': '谈判力',
+  'AI &自媒体运用': 'AI技能',
+};
 
 function point(i: number, r: number) {
   const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
@@ -59,9 +74,10 @@ function drawRadar(c: CanvasRenderingContext2D, scores: DimensionScores) {
   c.fillStyle = '#3a4056';
   c.textAlign = 'center'; c.textBaseline = 'middle';
   for (let i = 0; i < N; i++) {
-    const { x, y } = point(i, MAX_R + 22);
+    const { x, y } = point(i, MAX_R + 20);
     const dim = DIMENSION_NAMES[i];
-    c.fillText(dim.length > 4 ? dim.slice(0, 4) : dim, x, y);
+    const label = RADAR_LABELS[dim] || dim;
+    c.fillText(label, x, y);
   }
 }
 
@@ -91,7 +107,8 @@ export default function RadarChart({ scores }: { scores: DimensionScores }) {
     <View style={{
       background: '#ffffff', borderRadius: '16px', padding: '12px',
       border: '1px solid #edeff3', marginTop: '10px',
-    }}>
+    }}
+    >
       <Text style={{ fontSize: '16px', fontWeight: 700, color: '#1a1f2e', display: 'block', marginBottom: '2px' }}>
         你的画像
       </Text>

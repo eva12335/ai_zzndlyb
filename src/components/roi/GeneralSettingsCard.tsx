@@ -41,11 +41,13 @@ export default function GeneralSettingsCard() {
       padding: '16px',
       border: '1px solid #edeff3',
       marginBottom: '12px',
-    }}>
+    }}
+    >
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '12px',
-      }}>
+      }}
+      >
         {t('roi.general_settings')}
       </Text>
 
@@ -69,7 +71,8 @@ export default function GeneralSettingsCard() {
               width: '100%', padding: '9px 12px', borderRadius: '8px',
               border: '1px solid #edeff3', fontSize: FS.body,
               background: '#ffffff',
-            }}>
+            }}
+            >
               <Text style={{ color: '#517ea8', fontSize: FS.body }}>
                 {REVENUE_LABELS[store.revenueModel]}
               </Text>
@@ -99,7 +102,8 @@ export default function GeneralSettingsCard() {
               width: '100%', padding: '9px 12px', borderRadius: '8px',
               border: '1px solid #edeff3', fontSize: FS.body,
               background: '#ffffff',
-            }}>
+            }}
+            >
               <Text style={{ color: '#7d6cac', fontSize: FS.body }}>
                 {ENTITY_LABELS[store.entityType]}
               </Text>
@@ -125,7 +129,8 @@ export default function GeneralSettingsCard() {
               width: '100%', padding: '9px 12px', borderRadius: '8px',
               border: '1px solid #edeff3', fontSize: FS.body,
               background: '#ffffff',
-            }}>
+            }}
+            >
               <Text style={{ color: '#517ea8', fontSize: FS.body }}>
                 {CYCLE_LABELS[store.paymentCycle]}
               </Text>

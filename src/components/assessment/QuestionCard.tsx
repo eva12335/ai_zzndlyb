@@ -36,12 +36,14 @@ export default function QuestionCard({ question, selected, onSelect }: QuestionC
     <View style={{
       background: 'var(--surface)', borderRadius: '16px', padding: '18px 16px',
       border: '1px solid var(--border-subtle)', marginBottom: '14px',
-    }}>
+    }}
+    >
       <View style={{
         display: 'inline-block', fontSize: FS.label, fontWeight: 700, color: 'var(--gold)',
         background: 'var(--gold-light)', padding: '6px 14px', borderRadius: '999px',
         marginBottom: '10px',
-      }}>
+      }}
+      >
         {question.dimension} · 第 {question.dimIndex}/5 题
       </View>
 

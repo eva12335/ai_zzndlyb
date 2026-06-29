@@ -91,7 +91,8 @@ export default function ShareCard({
             width: '20px', height: '20px', borderRadius: '50%',
             border: '1.2px solid #C5A059',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
+          }}
+          >
             <Text style={{ fontSize: '10px', color: '#C5A059', lineHeight: 1 }}>▲</Text>
           </View>
           <Text style={{ fontSize: '13px', fontWeight: 700, color: '#f0ece4' }}>

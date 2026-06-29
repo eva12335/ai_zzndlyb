@@ -2,7 +2,7 @@
  * 测评页
  * 来源：PRD §7
  */
-import { View, Text, ScrollView } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FS } from '../../constants/fonts';
@@ -35,8 +35,6 @@ export default function AssessmentPage() {
   const next = () => useAssessmentStore.getState().nextQuestion();
   const prev = () => useAssessmentStore.getState().prevQuestion();
   const submit = () => useAssessmentStore.getState().submitAssessment();
-  const start = useAssessmentStore((s) => s.startAssessment);
-  const projectStore = useProjectStore();
   const { loading, error, report, isFallback, generateReport } = useAiReport();
   const [showReport, setShowReport] = useState(false);
 
@@ -97,14 +95,15 @@ export default function AssessmentPage() {
           />
         )}
 
-        {/* 💬 追问 AI — V2 彩蛋 */}
+        {/* 追问 AI — V2 彩蛋 */}
         <View style={{
           marginTop: '8px', padding: '14px', borderRadius: '12px',
           textAlign: 'center', border: '1.5px dashed #edeff3',
           background: '#fafbfc',
-        }}>
+        }}
+        >
           <Text style={{ fontSize: FS.label, fontWeight: 600, color: '#9298a8' }}>
-            💬 追问 AI
+            追问 AI
           </Text>
           <Text style={{ fontSize: '10px', color: '#b8bec8', display: 'block', marginTop: '2px' }}>
             即将上线 · 多轮追问深度分析

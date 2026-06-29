@@ -3,9 +3,9 @@
  * 来源：TECH_DESIGN §3.2 + PRD §7 测评表
  */
 import { create } from 'zustand';
-import type { AssessQuestion , AssessmentResult } from '../types/assessment';
-import { QUESTION_BANK, DIMENSION_NAMES } from '../utils/assessment';
-import { runAssessmentPipeline, classifyA, classifyB, getTagA, getTagB } from '../utils/assessmentEngine';
+import type { AssessmentResult } from '../types/assessment';
+import { QUESTION_BANK } from '../utils/assessment';
+import { runAssessmentPipeline } from '../utils/assessmentEngine';
 import { useUserStore } from './useUserStore';
 
 export type AssessPhase = 'answering' | 'result' | 'report';

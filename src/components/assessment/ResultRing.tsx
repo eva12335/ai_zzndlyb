@@ -77,12 +77,14 @@ export default function ResultRing({ totalA, totalB, maxScore }: Props) {
     <View style={{
       background: '#ffffff', borderRadius: '16px', padding: '12px',
       border: '1px solid #edeff3', marginTop: '10px',
-    }}>
+    }}
+    >
       {/* 标题 */}
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '2px',
-      }}>
+      }}
+      >
         一人公司准备度
       </Text>
 
@@ -95,7 +97,8 @@ export default function ResultRing({ totalA, totalB, maxScore }: Props) {
       <Text style={{
         fontSize: '13px', color: '#C5A059', fontWeight: 600,
         display: 'block', textAlign: 'center', marginTop: '-4px',
-      }}>
+      }}
+      >
         {grade(totalA)}
       </Text>
     </View>

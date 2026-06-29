@@ -50,7 +50,7 @@ export default function RoiPage() {
   }, [calc.profitLoss]);
 
   return (
-    <View style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <View style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 16px' }}>
       <ScrollView style={{ flex: 1 }} scrollY>
 
       {/* 模式切换 */}

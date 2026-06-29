@@ -3,7 +3,7 @@
  * 来源：PRD §6.1 税种切换 + TECH_DESIGN §3.8.1
  */
 import Decimal from 'decimal.js';
-import type { TaxConfig, TaxOutput, EntityType } from '../types/calculation';
+import type { TaxConfig, TaxOutput } from '../types/calculation';
 
 export function calculateTax(config: TaxConfig): TaxOutput {
   const { entityType, revenue, profit } = config;

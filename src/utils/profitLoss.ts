@@ -3,7 +3,7 @@
  * 来源：PRD §6.1 + TECH_DESIGN §3.1
  */
 import Decimal from 'decimal.js';
-import type { RevenueModel, PaymentCycle, EntityType , ProfitLossRow, ProfitLossOutput } from '../types/calculation';
+import type { RevenueModel, EntityType, ProfitLossRow, ProfitLossOutput } from '../types/calculation';
 import { calculateTax } from './tax';
 
 interface PnLInput {

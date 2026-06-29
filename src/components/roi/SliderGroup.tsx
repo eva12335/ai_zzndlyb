@@ -14,9 +14,9 @@ export default function SliderGroup() {
   const isService = store.mode === 'service';
 
   // ═══ 滑块量程 ═══
-  const maxPrice = isService ? 500 : Math.max((store.unitVariableCost || 5) * 10, 200);
-  const maxVolume = isService ? 120 : 10000;
-  const priceStep = isService ? 5 : 1;
+  const maxPrice = isService ? 5000 : Math.max((store.unitVariableCost || 5) * 10, 1000);
+  const maxVolume = isService ? 100 : 10000;
+  const priceStep = isService ? 20 : 1;
 
   // ═══ 当前值（回退默认） ═══
   const price = store.unitPrice ?? (isService ? 250 : 25);
@@ -174,7 +174,8 @@ export default function SliderGroup() {
       <Text style={{
         fontSize: '9px', color: '#9298a8',
         textAlign: 'center', marginTop: '6px', display: 'block',
-      }}>
+      }}
+      >
         {t('roi.slider_tax_note')}
       </Text>
     </View>

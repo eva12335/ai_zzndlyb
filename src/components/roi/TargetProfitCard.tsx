@@ -19,18 +19,16 @@ export default function TargetProfitCard({ requiredVolume, requiredPrice }: Prop
   const isService = store.mode === 'service';
   const hasTarget = store.targetProfit != null && store.targetProfit > 0;
 
-  const volSuffix = isService ? ' h' : '';
-  const volIcon = isService ? 'h' : '#';
-  const volLabel = isService ? t('roi.target_req_hours_label') : t('roi.target_req_vol_label');
+  const volSuffix = isService ? 'h' : '';
   const volValue = hasTarget && requiredVolume
     ? Math.ceil(requiredVolume.toNumber()).toLocaleString('zh-CN') + volSuffix
     : '—';
+  const volLabel = isService ? '所需计费' : t('roi.target_req_vol_label');
 
-  const priceIcon = isService ? '¥/h' : '¥';
-  const priceLabel = isService ? t('roi.target_req_rate') : t('roi.target_req_price');
   const priceValue = hasTarget && requiredPrice
     ? '¥' + requiredPrice.toFixed(2)
     : '—';
+  const priceLabel = isService ? '下限时薪' : t('roi.target_req_price');
 
   return (
     <View style={{
@@ -39,12 +37,14 @@ export default function TargetProfitCard({ requiredVolume, requiredPrice }: Prop
       padding: '16px',
       border: '1px solid #edeff3',
       marginBottom: '12px',
-    }}>
+    }}
+    >
       {/* 标题 */}
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '12px',
-      }}>
+      }}
+      >
         {t('roi.target_card_title')}
       </Text>
 
@@ -68,7 +68,8 @@ export default function TargetProfitCard({ requiredVolume, requiredPrice }: Prop
           <Text style={{
             position: 'absolute', right: '12px', top: '9px',
             fontSize: '12px', color: '#7d6cac', fontWeight: 500,
-          }}>
+          }}
+          >
             {t('roi.unit_yuan')}
           </Text>
         </View>
@@ -78,35 +79,38 @@ export default function TargetProfitCard({ requiredVolume, requiredPrice }: Prop
       <Text style={{
         fontSize: FS.caption, color: '#9298a8',
         display: 'block', marginBottom: '10px', paddingLeft: '4px',
-      }}>
+      }}
+      >
         {t('roi.target_card_hint')}
       </Text>
 
       {/* 推导结果：两卡并排 */}
       <View style={{ display: 'flex' }}>
         <View style={{ flex: 1, marginRight: '6px' }}>
-          <DerivedCard icon={volIcon} value={volValue} label={volLabel} />
+          <DerivedCard value={volValue} label={volLabel} />
         </View>
         <View style={{ flex: 1 }}>
-          <DerivedCard icon={priceIcon} value={priceValue} label={priceLabel} />
+          <DerivedCard value={priceValue} label={priceLabel} />
         </View>
       </View>
     </View>
   );
 }
 
-function DerivedCard({ icon, value, label }: { icon: string; value: string; label: string }) {
+function DerivedCard({ value, label }: { value: string; label: string }) {
   return (
     <View style={{
       padding: '12px 6px', borderRadius: '12px', textAlign: 'center',
       background: 'rgba(125,108,172,0.03)',
       border: '1px solid rgba(125,108,172,0.2)',
-    }}>
-      <Text style={{ fontSize: FS.heading, display: 'block', marginBottom: '2px' }}>{icon}</Text>
+    }}
+    >
       <Text style={{
         fontSize: FS.kpi, fontWeight: 800, color: '#7d6cac',
         overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-      }}>
+        display: 'block',
+      }}
+      >
         {value}
       </Text>
       <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>{label}</Text>

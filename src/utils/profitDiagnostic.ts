@@ -52,7 +52,7 @@ const DIAGNOSIS_LABELS: Record<RootCause, string> = {
 };
 
 export function diagnoseProfit(input: DiagnosticInput): ProfitDiagnostic | null {
-  const { unitPrice: U, unitVariableCost: VC, volume: V, fixedCost, tokenCost, acquisitionCost, netProfit } = input;
+  const { unitPrice: U, unitVariableCost: VC, volume: V, fixedCost, tokenCost, netProfit } = input;
 
   // 净利润 ≥ 0 → 无需诊断
   if (netProfit.gte(0)) return null;
@@ -93,7 +93,7 @@ function buildDiagnosis(
   totalGrossProfit: Decimal,
   totalFC: Decimal,
 ): string {
-  const { unitPrice: U, unitVariableCost: VC, volume: V } = input;
+  const { unitPrice: U, unitVariableCost: VC } = input;
 
   switch (cause) {
     case 'unitLoss':
@@ -120,7 +120,7 @@ function buildSuggestions(
   input: DiagnosticInput,
   totalFC: Decimal,
 ): SuggestionItem[] {
-  const { unitPrice: U, unitVariableCost: VC, volume: V, fixedCost, acquisitionCost } = input;
+  const { unitPrice: U, unitVariableCost: VC, volume: V, acquisitionCost } = input;
   const cm = U.minus(VC);
 
   switch (cause) {
@@ -158,14 +158,14 @@ function buildSuggestions(
 // ═══════════════════════════════════════════
 
 const ASSESSMENT_TIPS: Record<string, Partial<Record<RootCause, string>>> = {
-  '风险承受': {
-    unitLoss: '你的风险承受力较强，可考虑激进提价 30%-50% 测试市场反应。',
-    scaleGap: '风险承受力较强意味着你能承受更长的回本周期，不必急于盈利。',
+  '风险承受能力': {
+    unitLoss: '你的风险承受能力较强，可考虑激进提价 30%-50% 测试市场反应。',
+    scaleGap: '风险承受能力较强意味着你能承受更长的回本周期，不必急于盈利。',
   },
   '谈判技巧': {
     unitLoss: '谈判力是你的弱项，提价时建议先练习"价值报价"话术再做客户沟通。',
   },
-  '市场和客户关系': {
+  'AI &自媒体运用': {
     scaleGap: '获客是你的短板，建议从即刻/小红书等内容渠道做自然引流而非付费投放。',
     extraBurden: '你的获客成本过高可能与渠道选择有关，尝试内容营销替代付费广告。',
   },
@@ -184,9 +184,9 @@ function buildAssessmentTip(
     if (tip && score) {
       // 仅在对应维度偏低时追加
       if ((cause === 'unitLoss' || cause === 'scaleGap') && score.scoreA < 6) {
-        tips.push(`🧭 ${dim}：${tip}`);
+        tips.push(`${dim}：${tip}`);
       } else if (cause === 'extraBurden' && score.scoreB > 4) {
-        tips.push(`🧭 ${dim}：${tip}`);
+        tips.push(`${dim}：${tip}`);
       }
     }
   }

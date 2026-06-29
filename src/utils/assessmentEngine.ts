@@ -5,8 +5,8 @@
  * 纯函数，零随机，相同输入永远相同输出
  * A 侧 44 段文案 + B 侧 44 段文案 = 88 段预写
  */
-import type { DimensionScore, DimensionScores, TierA, TierB, Segment, AssessmentResult, AssessQuestion } from '../types/assessment';
-import { DIMENSION_NAMES, QUESTION_BANK, calculateScores } from './assessment';
+import type { DimensionScores, TierA, TierB, Segment, AssessmentResult } from '../types/assessment';
+import { DIMENSION_NAMES, calculateScores } from './assessment';
 
 // ═══════════════════════════════════════════
 // A 栏四档分类
@@ -35,17 +35,17 @@ export function classifyB(scoreB: number): TierB {
 // ═══════════════════════════════════════════
 
 const TAG_MAP_A: Record<string, Record<TierA, string>> = {
-  '独立动机':     { excellent: '高自驱', good: '有动力', weak: '动力一般', danger: '需外驱' },
-  '风险承受':     { excellent: '敢于冒险', good: '风险中性', weak: '偏保守', danger: '风险回避' },
-  '坚韧不拔':     { excellent: '极坚韧', good: '有韧性', weak: '容易气馁', danger: '易放弃' },
-  '自我控制':     { excellent: '高度自律', good: '自控良好', weak: '需外力', danger: '自律薄弱' },
-  '协调家庭社会事业': { excellent: '家庭支持', good: '基本协调', weak: '偶有冲突', danger: '阻力较大' },
-  '决策能力':     { excellent: '果断决策', good: '决策稳健', weak: '决策偏慢', danger: '优柔寡断' },
-  '适应事业需要': { excellent: '多面手', good: '适应力好', weak: '适应偏慢', danger: '单一专长' },
-  '对组织的责任': { excellent: '完全担当', good: '负责可靠', weak: '责任分摊', danger: '回避责任' },
-  '市场和客户关系': { excellent: '市场敏锐', good: '获客有方', weak: '获客待练', danger: '市场空白' },
-  '谈判技巧':     { excellent: '谈判高手', good: '沟通良好', weak: '谈判待练', danger: '不善谈判' },
-  'AI技能运用':   { excellent: 'AI加持', good: 'AI入门', weak: 'AI待学', danger: 'AI空白' },
+  '创办OPC的动机': { excellent: '高自驱', good: '有动力', weak: '动力待激发', danger: '需外部推动' },
+  '风险承受能力':               { excellent: '敢于冒险', good: '风险中性', weak: '偏谨慎', danger: '规避风险' },
+  '坚韧不拔/处理危机能力':       { excellent: '极坚韧', good: '有韧性', weak: '韧劲待练', danger: '遇阻易停' },
+  '主动性':                     { excellent: '主动进取', good: '积极行动', weak: '可以更主动', danger: '偏被动' },
+  '协调家庭·社会·OPC关系的能力': { excellent: '平衡得当', good: '基本协调', weak: '边界偶模糊', danger: '需明确边界' },
+  '决策能力':                   { excellent: '果断决策', good: '决策稳健', weak: '决策偏慢', danger: '决策犹豫' },
+  '适应OPC需要的能力': { excellent: '多面手', good: '适应力好', weak: '适应待提速', danger: '专注单一角色' },
+  '对OPC的承诺':     { excellent: '全情投入', good: '负责可靠', weak: '投入待加强', danger: '承诺需增强' },
+  '家庭支持':                   { excellent: '家庭支持', good: '基本理解', weak: '偶尔有顾虑', danger: '需加强沟通' },
+  '谈判技巧':                   { excellent: '谈判高手', good: '沟通良好', weak: '可以多练习', danger: '沟通待提升' },
+  'AI &自媒体运用':              { excellent: 'AI加持', good: 'AI入门', weak: 'AI待学', danger: 'AI待入门' },
 };
 
 // ═══════════════════════════════════════════
@@ -53,55 +53,89 @@ const TAG_MAP_A: Record<string, Record<TierA, string>> = {
 // ═══════════════════════════════════════════
 
 const TAG_MAP_B: Record<string, Record<TierB, string>> = {
-  '独立动机':     { clean: '依赖倾向低', mild: '偶有依赖', watch: '依赖需关注', severe: '依赖倾向高' },
-  '风险承受':     { clean: '无风险回避', mild: '轻微回避', watch: '回避需留意', severe: '风险回避明显' },
-  '坚韧不拔':     { clean: '无退缩倾向', mild: '偶有退缩', watch: '退缩需关注', severe: '退缩倾向高' },
-  '自我控制':     { clean: '自律无碍', mild: '偶有松懈', watch: '自律需加强', severe: '自律薄弱需关注' },
-  '协调家庭社会事业': { clean: '家庭无阻力', mild: '轻微摩擦', watch: '摩擦需关注', severe: '家庭阻力明显' },
-  '决策能力':     { clean: '决策无障碍', mild: '偶有犹豫', watch: '犹豫需留意', severe: '犹豫倾向高' },
-  '适应事业需要': { clean: '适应无障碍', mild: '适应稍慢', watch: '适应需推动', severe: '适应困难' },
-  '对组织的责任': { clean: '责任无回避', mild: '偶有推脱', watch: '推脱需留意', severe: '回避责任明显' },
-  '市场和客户关系': { clean: '获客无碍', mild: '获客偶难', watch: '获客需推动', severe: '获客困难' },
-  '谈判技巧':     { clean: '谈判无碍', mild: '谈判偶弱', watch: '谈判需练', severe: '谈判弱项优先' },
-  'AI技能运用':   { clean: '无AI抵触', mild: '轻微AI焦虑', watch: 'AI需推动', severe: 'AI抵触明显' },
+  '创办OPC的动机': { clean: '依赖倾向低', mild: '偶有依赖', watch: '依赖需关注', severe: '依赖倾向高' },
+  '风险承受能力':               { clean: '无风险回避', mild: '轻微回避', watch: '回避需留意', severe: '风险回避明显' },
+  '坚韧不拔/处理危机能力':       { clean: '无退缩倾向', mild: '偶有退缩', watch: '退缩需关注', severe: '退缩倾向高' },
+  '主动性':                     { clean: '主动无碍', mild: '偶有迟疑', watch: '被动需关注', severe: '被动倾向高' },
+  '协调家庭·社会·OPC关系的能力': { clean: '家庭无阻力', mild: '轻微摩擦', watch: '摩擦需关注', severe: '家庭阻力明显' },
+  '决策能力':                   { clean: '决策无障碍', mild: '偶有犹豫', watch: '犹豫需留意', severe: '犹豫倾向高' },
+  '适应OPC需要的能力': { clean: '适应无障碍', mild: '适应稍慢', watch: '适应需推动', severe: '适应困难' },
+  '对OPC的承诺':     { clean: '承诺无保留', mild: '偶有犹豫', watch: '犹豫需留意', severe: '承诺不足' },
+  '家庭支持':                   { clean: '家庭无阻力', mild: '轻微顾虑', watch: '顾虑需关注', severe: '家庭阻力明显' },
+  '谈判技巧':                   { clean: '谈判无碍', mild: '谈判偶弱', watch: '谈判需练', severe: '谈判弱项优先' },
+  'AI &自媒体运用':              { clean: '无AI抵触', mild: '轻微AI焦虑', watch: 'AI需推动', severe: 'AI抵触明显' },
 };
 
 // ═══════════════════════════════════════════
 // 段位公式：风险态度 × 能力标
 // ═══════════════════════════════════════════
 
-export function calculateSegment(scores: DimensionScores): Segment {
-  const riskScore = scores['风险承受']?.scoreA ?? 5;
-  const aiScore = scores['AI技能运用']?.scoreA ?? 5;
-  const motivationScore = scores['独立动机']?.scoreA ?? 5;
-  const marketScore = scores['市场和客户关系']?.scoreA ?? 5;
+const SEGMENT_HIGH = 80;
+const SEGMENT_MID = 60;
+
+export function calculateSegment(scores: DimensionScores, preTotalA?: number): Segment {
+  // ── 11维总分（调用方已计算时复用，满分110）──
+  const totalA = preTotalA ?? (() => {
+    let sum = 0;
+    for (const dim of Object.keys(scores)) sum += scores[dim]?.scoreA ?? 0;
+    return sum;
+  })();
+
+  // ── 4个关键维度（战略方向）──
+  const riskScore = scores['风险承受能力']?.scoreA ?? 5;
+  const aiScore = scores['AI &自媒体运用']?.scoreA ?? 5;
+  const motivationScore = scores['创办OPC的动机']?.scoreA ?? 5;
+  const marketScore = scores['适应OPC需要的能力']?.scoreA ?? 5;
 
   const riskAttitude = riskScore >= 6 ? '承受' : '回避';
   const aiFlag = aiScore >= 6;
   const motivationFlag = motivationScore >= 6;
   const marketFlag = marketScore >= 6;
 
-  // 全能型
-  if (riskAttitude === '承受' && aiFlag && motivationFlag && marketFlag) {
-    return '全能型一人公司';
-  }
-  // AI增强型
-  if (aiFlag && motivationFlag) {
+  // ── 第一层：11维总分定档 ──
+  // ≥80 高阶 · 60-79 中阶 · <60 初阶
+
+  // ═══ 高阶（≥80分）→ 只能是正面画像 ═══
+  if (totalA >=SEGMENT_HIGH) {
+    if (riskAttitude === '承受' && aiFlag && motivationFlag && marketFlag) {
+      return '全能型一人公司';
+    }
+    if (aiFlag && motivationFlag) {
+      return riskAttitude === '回避' ? '谨慎型技术派' : 'AI增强型个体';
+    }
+    if (motivationFlag) {
+      return '直觉型探索者';
+    }
+    // 动机偏低但总分高 → AI+市场驱动
     return 'AI增强型个体';
   }
-  // 谨慎型技术派
-  if (riskAttitude === '回避' && aiFlag && motivationFlag) {
-    return '谨慎型技术派';
+
+  // ═══ 中阶（60-79分）→ 按关键维度细分 ═══
+  if (totalA >=SEGMENT_MID) {
+    if (riskAttitude === '回避' && aiFlag && motivationFlag) {
+      return '谨慎型技术派';
+    }
+    if (riskAttitude === '承受' && motivationFlag && !aiFlag) {
+      return '直觉型探索者';
+    }
+    if (riskAttitude === '回避' && marketFlag) {
+      return '稳健型实干家';
+    }
+    if (aiFlag && motivationFlag) {
+      return 'AI增强型个体';
+    }
+    // 中阶但模式不典型 → 稳健型（最安全路径）
+    return '稳健型实干家';
   }
-  // 直觉型探索者
-  if (riskAttitude === '承受' && motivationFlag && !aiFlag) {
-    return '直觉型探索者';
-  }
-  // 稳健型实干家
+
+  // ═══ 初阶（<60分）→ 按关键维度细分，无匹配才观望 ═══
   if (riskAttitude === '回避' && marketFlag) {
     return '稳健型实干家';
   }
-  // 兜底
+  if (motivationFlag && riskAttitude === '承受') {
+    return '直觉型探索者';
+  }
+
   return '待激活观望者';
 }
 
@@ -141,7 +175,7 @@ export function runAssessmentPipeline(answers: Record<number, 'A' | 'B'>): Asses
     dimensionTiersB[dim] = classifyB(scoreB);
   }
 
-  const segment = calculateSegment(dimensionScores);
+  const segment = calculateSegment(dimensionScores, totalA);
   const ctaText = getCTA(segment);
 
   return {

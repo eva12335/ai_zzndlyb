@@ -6,7 +6,7 @@
  * 菜单项包含可交互项（测评导航、Toast 提示）和静态展示项（语言、关于）
  */
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { useTranslation } from 'react-i18next';
 import Taro from '@tarojs/taro';
 import { FS } from '../../constants/fonts';
@@ -21,8 +21,6 @@ export default function ProfilePage() {
   const [editorVisible, setEditorVisible] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
   const [projects, setProjects] = useState<SavedProject[]>([]);
-  const cloudSync = useUserStore((s) => s.cloudSync);
-  const toggleCloudSync = useUserStore((s) => s.toggleCloudSync);
   const assessmentCount = useUserStore((s) => s.assessmentCount);
   const analysisCount = useUserStore((s) => s.analysisCount);
   const loadProjects = useProjectStore((s) => s.loadProjects);
@@ -39,7 +37,7 @@ export default function ProfilePage() {
   // 菜单项配置：集中管理路由与交互逻辑
   const menuItems = [
     {
-      icon: '📊',
+      icon: '',
       label: '我的项目',
       sub: '本地保存',
       onClick: () => {
@@ -47,7 +45,7 @@ export default function ProfilePage() {
       },
     },
     {
-      icon: '📈',
+      icon: '',
       label: '历史测评',
       sub: '',
       onClick: () => {
@@ -55,7 +53,7 @@ export default function ProfilePage() {
       },
     },
     {
-      icon: '⚙️',
+      icon: '',
       label: '设置',
       sub: '',
       onClick: () => {
@@ -63,7 +61,7 @@ export default function ProfilePage() {
       },
     },
     {
-      icon: '☁️',
+      icon: '',
       label: '云端同步',
       sub: t('profile.cloud_soon'),
       rightSlot: (
@@ -85,13 +83,13 @@ export default function ProfilePage() {
       },
     },
     {
-      icon: '🌐',
+      icon: '',
       label: '语言',
       sub: t('profile.language_value'),
       onClick: undefined,
     },
     {
-      icon: 'ℹ️',
+      icon: '',
       label: '关于',
       sub: t('profile.about_value'),
       onClick: undefined,
@@ -178,7 +176,7 @@ export default function ProfilePage() {
               borderTop: i > 0 ? '1px solid var(--border-subtle)' : 'none',
             }}
           >
-            <Text style={{ fontSize: '18px', flexShrink: 0 }}>{item.icon}</Text>
+            {item.icon ? <Text style={{ fontSize: '18px', flexShrink: 0 }}>{item.icon}</Text> : null}
             <View style={{ flex: 1 }}>
               <Text
                 style={{

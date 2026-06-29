@@ -2,8 +2,9 @@
  * 盈亏平衡图 — 原生 Canvas (createCanvasContext)
  *
  * 绘制：绿色总收入线、红色总成本线、金色盈亏平衡标注
+ * Canvas 宽度响应式适配屏幕
  */
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { View, Text, Canvas } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import Decimal from 'decimal.js';
@@ -20,11 +21,6 @@ interface Props {
 }
 
 const CANVAS_ID = 'be-canvas';
-const W = 320;
-const H = 260;
-const PAD = { top: 20, right: 20, bottom: 40, left: 52 };
-const CW = W - PAD.left - PAD.right;
-const CH = H - PAD.top - PAD.bottom;
 
 /** 金额短格式 */
 function fmtY(v: number): string {
@@ -36,8 +32,29 @@ function fmtY(v: number): string {
 export default function BreakEvenChart({
   breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume, projection,
 }: Props) {
+  // 响应式 Canvas 尺寸：取屏幕宽度 - 页面边距，上限 340px
+  const [W, H] = useMemo(() => {
+    try {
+      const sw = Taro.getSystemInfoSync().windowWidth;
+      const w = Math.max(260, Math.min(sw - 80, 340));
+      const h = Math.round(w * 0.78);
+      return [w, h];
+    } catch {
+      return [300, 234];
+    }
+  }, []);
+
+  const PAD = useMemo(() => ({
+    top: Math.round(H * 0.08),
+    right: Math.round(W * 0.06),
+    bottom: Math.round(H * 0.16),
+    left: Math.round(W * 0.17),
+  }), [W, H]);
+
+  const CW = W - PAD.left - PAD.right;
+  const CH = H - PAD.top - PAD.bottom;
+
   useEffect(() => {
-    // 延迟一帧确保 Canvas 节点已挂载（微信小程序需要）
     const timer = setTimeout(() => {
       const ctx = Taro.createCanvasContext(CANVAS_ID);
       if (!ctx) return;
@@ -137,7 +154,7 @@ export default function BreakEvenChart({
     ctx.moveTo(beX, PAD.top);
     ctx.lineTo(beX, PAD.top + CH);
     ctx.stroke();
-    ctx.setLineDash([0, 0], 0); // 重置
+    ctx.setLineDash([0, 0], 0);
 
     // ── 盈亏平衡点圆点 ──
     const beY = toY(BER);
@@ -145,18 +162,21 @@ export default function BreakEvenChart({
     ctx.arc(beX, beY, 5, 0, 2 * Math.PI);
     ctx.setFillStyle('#C5A059');
     ctx.fill();
-    // 外发光模拟
     ctx.beginPath();
     ctx.arc(beX, beY, 9, 0, 2 * Math.PI);
     ctx.setFillStyle('rgba(197,160,89,0.15)');
     ctx.fill();
 
     // ── 图例 ──
-    const legendY = PAD.top + CH + 24;
+    const legendY = PAD.top + CH + Math.round(H * 0.09);
+    const legX1 = PAD.left + Math.round(W * 0.03);
+    const legX2 = PAD.left + Math.round(W * 0.30);
+    const legX3 = PAD.left + Math.round(W * 0.55);
+
     // 总收入
     ctx.beginPath();
-    ctx.moveTo(PAD.left + 10, legendY);
-    ctx.lineTo(PAD.left + 40, legendY);
+    ctx.moveTo(legX1, legendY);
+    ctx.lineTo(legX1 + 30, legendY);
     ctx.setStrokeStyle('#5cb894');
     ctx.setLineWidth(2.5);
     ctx.stroke();
@@ -164,50 +184,57 @@ export default function BreakEvenChart({
     ctx.setFillStyle('#3a4056');
     ctx.setTextAlign('left');
     ctx.setTextBaseline('middle');
-    ctx.fillText('总收入', PAD.left + 45, legendY);
+    ctx.fillText('总收入', legX1 + 35, legendY);
 
     // 总成本
     ctx.beginPath();
-    ctx.moveTo(PAD.left + 95, legendY);
-    ctx.lineTo(PAD.left + 125, legendY);
+    ctx.moveTo(legX2, legendY);
+    ctx.lineTo(legX2 + 30, legendY);
     ctx.setStrokeStyle('#e08676');
     ctx.setLineWidth(2.5);
     ctx.stroke();
-    ctx.fillText('总成本', PAD.left + 130, legendY);
+    ctx.fillText('总成本', legX2 + 35, legendY);
 
     // 盈亏平衡
     ctx.beginPath();
     ctx.setLineDash([3, 3], 0);
-    ctx.moveTo(PAD.left + 175, legendY);
-    ctx.lineTo(PAD.left + 205, legendY);
+    ctx.moveTo(legX3, legendY);
+    ctx.lineTo(legX3 + 30, legendY);
     ctx.setStrokeStyle('#C5A059');
     ctx.setLineWidth(1.5);
     ctx.stroke();
     ctx.setLineDash([0, 0], 0);
-    ctx.fillText('盈亏平衡', PAD.left + 210, legendY);
+    ctx.fillText('盈亏平衡', legX3 + 35, legendY);
 
     ctx.draw();
     }, 100);
     return () => clearTimeout(timer);
-  }, [breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume]);
+  }, [breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume, W, H, PAD, CW, CH]);
 
   return (
     <View style={{
       background: '#ffffff', borderRadius: '16px', padding: '12px',
       border: '1px solid #edeff3', marginTop: '12px',
-    }}>
+      overflow: 'hidden',
+    }}
+    >
       <Text style={{
         fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
         display: 'block', marginBottom: '4px',
-      }}>
+      }}
+      >
         盈亏平衡分析
       </Text>
-      <Canvas canvasId={CANVAS_ID} style={{ width: `${W}px`, height: `${H}px`, margin: '0 auto', display: 'block' }} />
+      <Canvas
+        canvasId={CANVAS_ID}
+        style={{ width: `${W}px`, height: `${H}px`, margin: '0 auto', display: 'block', maxWidth: '100%' }}
+      />
       {projection && projection.breakEvenMonth != null && (
         <Text style={{
           display: 'block', marginTop: '6px', fontSize: '13px',
           color: '#517ea8', textAlign: 'center', fontWeight: 600,
-        }}>
+        }}
+        >
           按增长率，第 {projection.breakEvenMonth} 个月扭亏
         </Text>
       )}
