@@ -11,7 +11,7 @@ const App = ({ children }: PropsWithChildren) => {
     if (Taro.getEnv() === Taro.ENV_TYPE.WEAPP) {
       try {
         // @ts-ignore wx 在微信小程序环境全局可用
-        wx.cloud.init({ env: 'cloudbase-dog6buex81dc9cd93' });
+        wx.cloud.init({ env: '你的云环境ID' });
       } catch (_) { /* 云开发未开通时静默 */ }
     }
   }, []);

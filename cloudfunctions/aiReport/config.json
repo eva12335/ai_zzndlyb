@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "openapi": []
+  },
+  "env": {
+    "DASHSCOPE_API_KEY": ""
+  }
+}
