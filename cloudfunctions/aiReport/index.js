@@ -66,18 +66,17 @@ exports.main = async (event, context) => {
 
   const userMessage = JSON.stringify({
     segmentLabel,
-    totalScore: totalScore ?? null,
+    totalScore: totalScore != null ? totalScore : null,
     dimensionScores,
-    mode: mode ?? null,
-    projectName: projectName ?? null,
-    costData: costData ?? null,
+    mode: mode != null ? mode : null,
+    projectName: projectName != null ? projectName : null,
+    costData: costData != null ? costData : null,
   }, null, 2);
 
   try {
     const https = require('https');
 
     const response = await new Promise((resolve, reject) => {
-      const url = new URL('https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions');
       const body = JSON.stringify({
         model: 'qwen-plus',
         messages: [
@@ -89,17 +88,17 @@ exports.main = async (event, context) => {
       });
 
       const req = https.request({
-        hostname: url.hostname,
-        path: url.pathname,
+        hostname: 'dashscope.aliyuncs.com',
+        path: '/compatible-mode/v1/chat/completions',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': 'Bearer ' + apiKey,
         },
-      }, (res) => {
-        let data = '';
-        res.on('data', chunk => data += chunk);
-        res.on('end', () => resolve({ status: res.statusCode, data }));
+      }, function (res) {
+        var data = '';
+        res.on('data', function (chunk) { data += chunk; });
+        res.on('end', function () { resolve({ status: res.statusCode, data: data }); });
       });
 
       req.on('error', reject);
