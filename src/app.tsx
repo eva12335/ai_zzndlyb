@@ -16,6 +16,7 @@ const App = ({ children }: PropsWithChildren) => {
     <View style={{
       display: 'flex', justifyContent: 'center',
       background: '#d5d8e0', minHeight: '100vh',
+      overflowX: 'hidden',
     }}
     >
       <View style={{
@@ -25,6 +26,7 @@ const App = ({ children }: PropsWithChildren) => {
         fontFamily: "'Noto Sans SC', -apple-system, sans-serif",
         boxShadow: '0 0 40px rgba(0,0,0,0.12)',
         position: 'relative',
+        overflowX: 'hidden',
       }}
       >
         {children}

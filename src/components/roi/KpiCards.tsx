@@ -140,14 +140,14 @@ function KpiCard({
 }) {
   return (
     <View style={{
-      padding: '14px 10px', borderRadius: '12px', textAlign: 'center',
+      padding: '14px 8px', borderRadius: '12px', textAlign: 'center',
       background: bgColor,
       border: '1px solid ' + borderColor,
       overflow: 'hidden',
     }}
     >
       <Text style={{
-        fontSize: '18px', fontWeight: 700, color: valueColor,
+        fontSize: '16px', fontWeight: 600, color: valueColor,
         display: 'block', marginBottom: '2px',
         overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
       }}

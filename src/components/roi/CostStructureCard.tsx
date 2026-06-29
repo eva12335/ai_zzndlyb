@@ -43,7 +43,7 @@ export default function CostStructureCard() {
 
       {/* Row 1: 月度固定成本 + 变动成本(产品) / Token(服务) */}
       <View style={{ display: 'flex', marginBottom: '10px' }}>
-        <View style={{ flex: 1, marginRight: '6px' }}>
+        <View style={{ flex: 1, marginRight: '6px', minWidth: 0 }}>
           <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
             {t('roi.field_fixed_cost')} <Text style={{ color: '#d47563', fontWeight: 700 }}>{t('roi.label_required')}</Text>
           </Text>
@@ -58,7 +58,7 @@ export default function CostStructureCard() {
         </View>
 
         {mode === 'product' ? (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, minWidth: 0 }}>
             <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
               {t('roi.field_unit_cost')} <Text style={{ color: '#d47563', fontWeight: 700 }}>{t('roi.label_required')}</Text>
             </Text>
@@ -72,7 +72,7 @@ export default function CostStructureCard() {
             </View>
           </View>
         ) : (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, minWidth: 0 }}>
             <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
               {t('roi.field_token')} <Text style={{ fontSize: FS.caption, color: '#517ea8' }}>{t('roi.label_default_0')}</Text>
             </Text>
@@ -91,7 +91,7 @@ export default function CostStructureCard() {
       {/* Row 2: Token(产品型) + 月总成本 / 获客成本(服务型) + 拉新数 */}
       {mode === 'product' ? (
         <View style={{ display: 'flex' }}>
-          <View style={{ flex: 1, marginRight: '6px' }}>
+          <View style={{ flex: 1, marginRight: '6px', minWidth: 0 }}>
             <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
               {t('roi.field_token')} <Text style={{ fontSize: FS.caption, color: '#517ea8' }}>{t('roi.label_default_0')}</Text>
             </Text>
@@ -104,7 +104,7 @@ export default function CostStructureCard() {
               <Text style={{ ...unitLabel, color: '#517ea8', fontWeight: 500 }}>{t('roi.unit_yuan')}</Text>
             </View>
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, minWidth: 0 }}>
             <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
               {t('roi.field_total_cost')}
             </Text>
@@ -119,7 +119,7 @@ export default function CostStructureCard() {
         </View>
       ) : (
         <View style={{ display: 'flex' }}>
-          <View style={{ flex: 1, marginRight: '6px' }}>
+          <View style={{ flex: 1, marginRight: '6px', minWidth: 0 }}>
             <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
               {t('roi.field_acq_per_client')} <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>{t('roi.label_optional')}</Text>
             </Text>
@@ -132,7 +132,7 @@ export default function CostStructureCard() {
               <Text style={{ position: 'absolute', right: '12px', top: '9px', fontSize: '12px', color: '#d47563', fontWeight: 500 }}>{t('roi.unit_yuan')}</Text>
             </View>
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, minWidth: 0 }}>
             <Text style={{ fontSize: FS.label, fontWeight: 500, color: '#9298a8', marginBottom: '4px', display: 'block' }}>
               {t('roi.field_new_clients')} <Text style={{ fontSize: FS.caption, color: '#517ea8' }}>{t('roi.label_default_1')}</Text>
             </Text>
