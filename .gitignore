@@ -4,3 +4,7 @@ dist-web/
 .swc/
 *.png
 .env
+*.Zone.Identifier
+*.url
+project.private.config.json
+tailwind.config.js
