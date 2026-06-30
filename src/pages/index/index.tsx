@@ -28,6 +28,13 @@ export default function IndexPage() {
     Taro.switchTab({ url: '/pages/roi/index' });
   };
 
+  Taro.useShareAppMessage(() => {
+    return {
+      title: '一人公司罗盘 — 你适合一人公司吗？',
+      path: '/pages/index/index',
+    };
+  });
+
   return (
     <View style={{ padding: '16px', paddingBottom: '80px' }}>
       <HeroPanel />

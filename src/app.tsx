@@ -16,6 +16,16 @@ const App = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  // 启用分享转发（"···"菜单中"转发"按钮）
+  useEffect(() => {
+    if (Taro.getEnv() === Taro.ENV_TYPE.WEAPP) {
+      try {
+        // @ts-ignore
+        wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
+      } catch (_) { /* 静默处理 */ }
+    }
+  }, []);
+
   // 静默识别：应用启动时自动获取匿名标识
   useEffect(() => {
     useUserStore.getState().identify().catch(() => {

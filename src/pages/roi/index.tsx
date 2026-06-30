@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import { useTranslation } from 'react-i18next';
 import Decimal from 'decimal.js';
 import { FS } from '../../constants/fonts';
@@ -27,6 +28,12 @@ import SaveProjectBtn from '../../components/shared/SaveProjectBtn';
 import TabBar from '../../components/layout/TabBar';
 
 export default function RoiPage() {
+  Taro.useShareAppMessage(() => {
+    return {
+      title: '一人公司罗盘 — ROI 利润分析，算算你的项目能不能赚钱',
+      path: '/pages/roi/index',
+    };
+  });
   const { t } = useTranslation();
   const mode = useProjectStore((s) => s.mode);
   const setMode = useProjectStore((s) => s.setMode);

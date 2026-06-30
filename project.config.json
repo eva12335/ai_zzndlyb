@@ -3,7 +3,7 @@
   "cloudfunctionRoot": "cloudfunctions/",
   "projectname": "一人公司罗盘",
   "description": "test",
-  "appid": "wxb121060f901832ea",
+  "appid": "wx8fc542774e54f323",
   "setting": {
     "urlCheck": true,
     "es6": false,
@@ -41,5 +41,6 @@
     "include": []
   },
   "simulatorPluginLibVersion": {},
-  "editorSetting": {}
+  "editorSetting": {},
+  "libVersion": "3.16.1"
 }

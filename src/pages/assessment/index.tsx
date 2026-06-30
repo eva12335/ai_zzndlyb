@@ -4,6 +4,7 @@
  */
 import { View, Text } from '@tarojs/components';
 import { useState, useCallback } from 'react';
+import Taro from '@tarojs/taro';
 import { useTranslation } from 'react-i18next';
 import { FS } from '../../constants/fonts';
 import { useAssessmentStore } from '../../store/useAssessmentStore';
@@ -26,6 +27,12 @@ const btnBase = {
 };
 
 export default function AssessmentPage() {
+  Taro.useShareAppMessage(() => {
+    return {
+      title: '一人公司适合度测评 — 看看你适合一人公司吗？',
+      path: '/pages/assessment/index',
+    };
+  });
   const { t } = useTranslation();
   const phase = useAssessmentStore((s) => s.phase);
   const idx = useAssessmentStore((s) => s.currentQuestionIndex);

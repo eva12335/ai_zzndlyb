@@ -17,6 +17,12 @@ import { useUserStore } from '../../store/useUserStore';
 import { useProjectStore, type SavedProject } from '../../store/useProjectStore';
 
 export default function ProfilePage() {
+  Taro.useShareAppMessage(() => {
+    return {
+      title: '一人公司罗盘 — 你的创业决策工具箱',
+      path: '/pages/profile/index',
+    };
+  });
   const { t } = useTranslation();
   const [editorVisible, setEditorVisible] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
