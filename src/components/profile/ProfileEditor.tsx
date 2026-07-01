@@ -117,26 +117,6 @@ export default function ProfileEditor({ visible, onClose }: Props) {
           {t('profile.avatar_privacy')}
         </Text>
 
-        {/* 头像功能提示 */}
-        <View
-          style={{
-            background: 'var(--gold-light)',
-            borderRadius: '8px',
-            padding: '10px 12px',
-            marginBottom: '20px',
-          }}
-        >
-          <Text
-            style={{
-              fontSize: '12px',
-              color: 'var(--gold)',
-              display: 'block',
-            }}
-          >
-            {t('profile.avatar_coming_soon')}
-          </Text>
-        </View>
-
         {/* 按钮组 */}
         <View style={{ display: 'flex', gap: '12px' }}>
           <View

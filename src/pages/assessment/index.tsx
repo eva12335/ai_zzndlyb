@@ -120,7 +120,7 @@ export default function AssessmentPage() {
             追问 AI
           </Text>
           <Text style={{ fontSize: '10px', color: '#b8bec8', display: 'block', marginTop: '2px' }}>
-            即将上线 · 多轮追问深度分析
+            深度追问分析
           </Text>
         </View>
 

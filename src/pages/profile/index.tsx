@@ -67,36 +67,6 @@ export default function ProfilePage() {
     },
     {
       icon: '',
-      label: '设置',
-      sub: '',
-      onClick: () => {
-        Taro.showToast({ title: '设置功能即将上线', icon: 'none', duration: 1500 });
-      },
-    },
-    {
-      icon: '',
-      label: '云端同步',
-      sub: t('profile.cloud_soon'),
-      rightSlot: (
-        <Text
-          style={{
-            fontSize: '12px',
-            color: 'var(--gold)',
-            background: 'var(--gold-light)',
-            padding: '2px 8px',
-            borderRadius: '10px',
-            flexShrink: 0,
-          }}
-        >
-          {t('profile.cloud_soon')}
-        </Text>
-      ),
-      onClick: () => {
-        Taro.showToast({ title: '云端同步功能即将上线', icon: 'none', duration: 1500 });
-      },
-    },
-    {
-      icon: '',
       label: '语言',
       sub: t('profile.language_value'),
       onClick: undefined,
