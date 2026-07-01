@@ -23,6 +23,13 @@ export default function ProfilePage() {
       path: '/pages/profile/index',
     };
   });
+
+  Taro.useShareTimeline(() => {
+    return {
+      title: '一人公司罗盘 — 你的创业决策工具箱',
+    };
+  });
+
   const { t } = useTranslation();
   const [editorVisible, setEditorVisible] = useState(false);
   const [showProjects, setShowProjects] = useState(false);

@@ -35,6 +35,12 @@ export default function IndexPage() {
     };
   });
 
+  Taro.useShareTimeline(() => {
+    return {
+      title: '一人公司罗盘 — 你适合一人公司吗？',
+    };
+  });
+
   return (
     <View style={{ padding: '16px', paddingBottom: '80px' }}>
       <HeroPanel />

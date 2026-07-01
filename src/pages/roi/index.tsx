@@ -34,6 +34,13 @@ export default function RoiPage() {
       path: '/pages/roi/index',
     };
   });
+
+  Taro.useShareTimeline(() => {
+    return {
+      title: '一人公司罗盘 — ROI 利润分析，算算你的项目能不能赚钱',
+    };
+  });
+
   const { t } = useTranslation();
   const mode = useProjectStore((s) => s.mode);
   const setMode = useProjectStore((s) => s.setMode);

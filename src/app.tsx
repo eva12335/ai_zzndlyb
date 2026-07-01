@@ -21,7 +21,7 @@ const App = ({ children }: PropsWithChildren) => {
     if (Taro.getEnv() === Taro.ENV_TYPE.WEAPP) {
       try {
         // @ts-ignore
-        wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage'] });
+        wx.showShareMenu({ withShareTicket: false, menus: ['shareAppMessage', 'shareTimeline'] });
       } catch (_) { /* 静默处理 */ }
     }
   }, []);

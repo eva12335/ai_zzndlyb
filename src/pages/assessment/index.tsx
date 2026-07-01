@@ -33,6 +33,13 @@ export default function AssessmentPage() {
       path: '/pages/assessment/index',
     };
   });
+
+  Taro.useShareTimeline(() => {
+    return {
+      title: '一人公司适合度测评 — 看看你适合一人公司吗？',
+    };
+  });
+
   const { t } = useTranslation();
   const phase = useAssessmentStore((s) => s.phase);
   const idx = useAssessmentStore((s) => s.currentQuestionIndex);
