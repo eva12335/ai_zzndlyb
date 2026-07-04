@@ -20,14 +20,14 @@ const CHECK_STYLE = {
 function columnStyle(side: 'A' | 'B', selected: 'A' | 'B' | null) {
   const isSel = selected === side;
   return {
-    flex: 1, padding: '14px', borderRadius: '12px',
+    padding: '14px', borderRadius: '12px', width: '100%',
     border: isSel ? '2px solid var(--gold)' : '1.5px solid var(--border-subtle)',
     background: isSel ? 'var(--gold-light)' : 'var(--surface)',
     boxShadow: isSel ? '0 0 0 3px var(--gold-light)' : 'var(--shadow-xs)',
     fontSize: '16px', color: 'var(--text-body)', lineHeight: 1.7,
     position: 'relative' as const,
-    marginRight: side === 'A' ? '4px' : 0,
-    marginLeft: side === 'B' ? '4px' : 0,
+    marginBottom: side === 'A' ? '8px' : 0,
+    marginTop: side === 'B' ? '8px' : 0,
   };
 }
 
@@ -47,15 +47,11 @@ export default function QuestionCard({ question, selected, onSelect }: QuestionC
         {question.dimension} · 第 {question.dimIndex}/5 题
       </View>
 
-      <View style={{ display: 'flex', alignItems: 'flex-start' }}>
+      <View>
         <View onClick={() => onSelect('A')} style={columnStyle('A', selected)}>
           <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'A' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>A 栏</Text>
           <Text>{question.statementA}</Text>
           {selected === 'A' && <View style={CHECK_STYLE}>✓</View>}
-        </View>
-
-        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', paddingTop: '8px', flexShrink: 0 }}>
-          <Text style={{ fontSize: FS.label, fontWeight: 700, color: 'var(--text-muted)' }}>VS</Text>
         </View>
 
         <View onClick={() => onSelect('B')} style={columnStyle('B', selected)}>

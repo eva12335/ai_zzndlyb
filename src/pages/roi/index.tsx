@@ -125,6 +125,16 @@ export default function RoiPage() {
         </View>
       )}
 
+      {/* 计算错误（如定价 ≤ 变动成本导致贡献毛利为负） */}
+      {calc.error && (
+        <View style={{ padding: '12px', background: 'rgba(212,117,99,0.06)', borderRadius: '10px', border: '1px solid rgba(212,117,99,0.2)', marginBottom: '12px' }}>
+          <Text style={{ fontSize: FS.caption, color: 'var(--red)', display: 'block' }}>⚠️ {calc.error}</Text>
+        </View>
+      )}
+
+      {/* 联动滑块始终可见 — 否则单价拖低后滑块也消失，用户无法调回 */}
+      <SliderGroup />
+
       {/* 结果区 */}
       {hasResult && (
         <>
@@ -134,7 +144,6 @@ export default function RoiPage() {
             breakEven={calc.breakEven}
             currentVolume={V}
           />
-          <SliderGroup />
           <BreakEvenChart
             breakEvenVolume={calc.breakEven!.breakEvenVolume}
             breakEvenRevenue={calc.breakEven!.breakEvenRevenue}

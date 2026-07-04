@@ -14,7 +14,8 @@ export default function SliderGroup() {
   const isService = store.mode === 'service';
 
   // ═══ 滑块量程 ═══
-  const maxPrice = isService ? 5000 : Math.max((store.unitVariableCost || 5) * 10, 1000);
+  // 小成本友好：上限 300，成本联动×3（成本 100 → 上限 300）
+  const maxPrice = isService ? 5000 : Math.max((store.unitVariableCost || 5) * 3, 300);
   const maxVolume = isService ? 100 : 10000;
   const priceStep = isService ? 20 : 1;
 

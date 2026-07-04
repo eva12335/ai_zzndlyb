@@ -8,3 +8,4 @@ dist-web/
 *.url
 project.private.config.json
 tailwind.config.js
+CLAUDE.md
