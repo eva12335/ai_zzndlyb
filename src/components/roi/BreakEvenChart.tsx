@@ -291,7 +291,7 @@ export default function BreakEvenChart({
     ctx.draw();
     }, 100);
     return () => clearTimeout(timer);
-  }, [breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume, W, H, PAD, CW, CH]);
+  }, [breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume, isService, W, H, PAD, CW, CH]);
 
   return (
     <View style={{

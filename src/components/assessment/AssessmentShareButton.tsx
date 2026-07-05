@@ -300,16 +300,17 @@ export default function AssessmentShareButton({ result }: Props) {
         </Text>
       </View>
 
-      {/* 隐藏 Canvas：visibility:hidden 渲染但不显示，不闪不退 */}
+      {/* 隐藏 Canvas：opacity:0 确保 canvasToTempFilePath 可正常导出 */}
       <Canvas
         canvasId={CANVAS_ID}
         style={{
-          position: 'fixed',
+          position: 'absolute',
           left: '0',
           top: '0',
           width: `${W}px`,
           height: `${H}px`,
-          visibility: 'hidden',
+          opacity: '0',
+          pointerEvents: 'none',
         }}
       />
     </View>

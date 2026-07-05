@@ -14,8 +14,8 @@ function useCostText(
   storeVal: number,
   setStore: (v: number) => void,
 ): [string, (raw: string) => void, () => void] {
-  const [text, setText] = useState(storeVal ? String(storeVal) : '');
-  useEffect(() => { setText(storeVal ? String(storeVal) : ''); }, [storeVal]);
+  const [text, setText] = useState(storeVal != null ? String(storeVal) : '');
+  useEffect(() => { setText(storeVal != null ? String(storeVal) : ''); }, [storeVal]);
   const onChange = (raw: string) => { setText(raw); const n = Number(raw); if (!isNaN(n)) setStore(n); };
   const onBlur = () => { const v = Math.round(storeVal * 100) / 100; setStore(v); setText(v ? String(v) : ''); };
   return [text, onChange, onBlur];

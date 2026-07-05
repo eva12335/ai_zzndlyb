@@ -109,6 +109,7 @@
     "kpi_completion": "Completion Rate",
     "kpi_breakeven_rev": "Break-even Revenue",
     "kpi_operating_profit": "Operating Profit",
+    "kpi_target_gap": "Target Gap",
     "kpi_safety_margin": "Safety Margin",
     "target_derivation": "Target Profit",
     "target_derive_label": "Target: ",

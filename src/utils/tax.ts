@@ -44,24 +44,23 @@ export function calculateTax(config: TaxConfig): TaxOutput {
   return { vat, incomeTax, netProfit };
 }
 
-/** 经营所得个税：五级累进 + 年≤200万减半征收（至2027年底） */
+/** 经营所得个税：五级累进 + 年≤200万部分减半征收（至2027年底） */
 function calculateBusinessTax(profit: Decimal): Decimal {
   const annual = profit.times(12);
   // 五级超额累进
-  let annualTax = new Decimal(0);
-  if (annual.lte(30_000)) {
-    annualTax = annual.times(0.05);
-  } else if (annual.lte(90_000)) {
-    annualTax = annual.times(0.1).minus(1_500);
-  } else if (annual.lte(300_000)) {
-    annualTax = annual.times(0.2).minus(10_500);
-  } else if (annual.lte(500_000)) {
-    annualTax = annual.times(0.3).minus(40_500);
+  const calcTax = (a: Decimal) => {
+    if (a.lte(30_000)) return a.times(0.05);
+    if (a.lte(90_000)) return a.times(0.1).minus(1_500);
+    if (a.lte(300_000)) return a.times(0.2).minus(10_500);
+    if (a.lte(500_000)) return a.times(0.3).minus(40_500);
+    return a.times(0.35).minus(65_500);
+  };
+  let annualTax = calcTax(annual);
+  // 年≤200万部分减半：超过200万时，仅200万以内部分减半
+  if (annual.gt(2_000_000)) {
+    const taxAt2M = calcTax(new Decimal(2_000_000));
+    annualTax = taxAt2M.div(2).plus(annualTax.minus(taxAt2M));
   } else {
-    annualTax = annual.times(0.35).minus(65_500);
-  }
-  // 年≤200万减半征收
-  if (annual.lte(200_000)) {
     annualTax = annualTax.div(2);
   }
   return annualTax.div(12);
