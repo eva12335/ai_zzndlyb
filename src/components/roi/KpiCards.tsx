@@ -1,12 +1,15 @@
 /**
  * 6 KPI 指标卡片 — 微信小程序兼容版
  *
- * 布局：2 列 × 3 行（避免 3 列在小屏上文字溢出）
+ * 布局：3 行 × 2 列，紧凑驾驶舱，无分组标签
+ *
+ * Row 1: 月净利润 + 当前完成率      → 结果 + 进度
+ * Row 2: 盈亏平衡量 + 盈亏平衡收入   → 量的门槛 + 额的门槛
+ * Row 3: 营业利润 + 安全边际率      → 经营质量 + 抗风险缓冲
  */
 import { View, Text } from '@tarojs/components';
 import { useTranslation } from 'react-i18next';
 import Decimal from 'decimal.js';
-import { FS } from '../../constants/fonts';
 import { useProjectStore } from '../../store/useProjectStore';
 import type { BreakEvenOutput } from '../../types/calculation';
 
@@ -50,16 +53,7 @@ export default function KpiCards({ netProfit, operatingProfit, breakEven, curren
         {t('roi.kpi_section_title')}
       </Text>
 
-      {/* 行标签：盈利规模 */}
-      <Text style={{
-        fontSize: FS.caption, fontWeight: 600, color: '#9298a8',
-        display: 'block', marginBottom: '6px',
-      }}
-      >
-        {t('roi.kpi_row_profit')}
-      </Text>
-
-      {/* Row 1: 月净利润 + 盈亏平衡量 */}
+      {/* Row 1: 月净利润 + 当前完成率 */}
       <View style={{ display: 'flex', marginBottom: '8px' }}>
         <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
           <KpiCard
@@ -72,47 +66,38 @@ export default function KpiCards({ netProfit, operatingProfit, breakEven, curren
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>
           <KpiCard
+            value={completionRate ? completionRate.toFixed(2) + '%' : '—'}
+            label={t('roi.kpi_completion')}
+            valueColor="#1a1f2e"
+          />
+        </View>
+      </View>
+
+      {/* Row 2: 盈亏平衡量 + 盈亏平衡收入 */}
+      <View style={{ display: 'flex', marginBottom: '8px' }}>
+        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
+          <KpiCard
             value={bev ? bev.ceil().toNumber().toLocaleString('zh-CN') + unitLabel : '—'}
             label={t('roi.kpi_breakeven_vol')}
             valueColor="#517ea8"
           />
         </View>
-      </View>
-
-      {/* Row 2: 盈亏平衡收入 + 营业利润 */}
-      <View style={{ display: 'flex', marginBottom: '8px' }}>
-        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
+        <View style={{ flex: 1, minWidth: 0 }}>
           <KpiCard
             value={ber ? '¥' + ber.toNumber().toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}
             label={t('roi.kpi_breakeven_rev')}
             valueColor="#517ea8"
           />
         </View>
-        <View style={{ flex: 1, minWidth: 0 }}>
+      </View>
+
+      {/* Row 3: 营业利润 + 安全边际率 */}
+      <View style={{ display: 'flex' }}>
+        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
           <KpiCard
             value={operatingProfit ? (operatingProfit.gte(0) ? '+¥' : '−¥') + operatingProfit.abs().toFixed(2) : '—'}
             label={t('roi.kpi_operating_profit')}
             valueColor={operatingProfit && operatingProfit.gte(0) ? '#162340' : '#d47563'}
-          />
-        </View>
-      </View>
-
-      {/* 行标签：安全边际 */}
-      <Text style={{
-        fontSize: FS.caption, fontWeight: 600, color: '#9298a8',
-        display: 'block', marginBottom: '6px',
-      }}
-      >
-        {t('roi.kpi_row_safety')}
-      </Text>
-
-      {/* Row 3: 当前完成率 + 安全边际率 */}
-      <View style={{ display: 'flex' }}>
-        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
-          <KpiCard
-            value={completionRate ? completionRate.toFixed(2) + '%' : '—'}
-            label={t('roi.kpi_completion')}
-            valueColor="#1a1f2e"
           />
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>

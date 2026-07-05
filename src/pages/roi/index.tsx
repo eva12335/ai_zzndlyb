@@ -132,9 +132,6 @@ export default function RoiPage() {
         </View>
       )}
 
-      {/* 联动滑块始终可见 — 否则单价拖低后滑块也消失，用户无法调回 */}
-      <SliderGroup />
-
       {/* 结果区 */}
       {hasResult && (
         <>
@@ -153,6 +150,7 @@ export default function RoiPage() {
             volume={V}
             projection={calc.projection ?? undefined}
           />
+          <SliderGroup />
           <CapacityWarning volume={V} />
           <ReportTabs
             profitLoss={calc.profitLoss!}
@@ -179,6 +177,9 @@ export default function RoiPage() {
           <SaveProjectBtn />
         </>
       )}
+
+      {/* 无结果时滑块兜底 — 防止极端参数导致结果消失后滑块也不可见 */}
+      {!hasResult && <SliderGroup />}
 
       </ScrollView>
       <TabBar />
