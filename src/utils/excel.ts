@@ -47,7 +47,7 @@ export function exportProfitLossToText(
   lines.push(padRow('增值税', `¥${profitLoss.taxDetail.vat.toFixed(2)}`));
   lines.push(padRow('所得税', `¥${profitLoss.taxDetail.incomeTax.toFixed(2)}`));
   lines.push('');
-  lines.push('── 一人公司罗盘 · meoo.fun ──');
+  lines.push('── OPC创业罗盘 ──');
 
   return lines.join('\n');
 }
@@ -90,7 +90,7 @@ export function exportCashFlowToText(
   }
 
   lines.push('');
-  lines.push('── 一人公司罗盘 · meoo.fun ──');
+  lines.push('── OPC创业罗盘 ──');
 
   return lines.join('\n');
 }
@@ -110,7 +110,7 @@ export function buildShareText(
 ): string {
   const unit = isService ? '小时' : '件';
   const lines: string[] = [];
-  lines.push('🧭 一人公司罗盘');
+  lines.push('🧭 OPC创业罗盘');
   lines.push('');
   lines.push(`📊 ${projectName}`);
   lines.push(`定价 ¥${unitPrice}，每月需卖 ${breakEvenVolume} ${unit} 才能回本`);
@@ -126,7 +126,7 @@ export function buildShareText(
     lines.push(`💡 ${insight}`);
   }
   lines.push('');
-  lines.push('扫码测测你的项目 → meoo.fun');
+  lines.push('微信搜一搜"OPC创业罗盘"');
   return lines.join('\n');
 }
 
@@ -136,7 +136,7 @@ export function buildShareText(
 
 export function buildAssessmentShareText(result: AssessmentResult): string {
   const lines: string[] = [];
-  lines.push('🧭 一人公司罗盘 · 适合度测评');
+  lines.push('🧭 OPC创业罗盘 · 适合度测评');
   lines.push('');
   lines.push(`🏷️ 我的段位：${result.segment}`);
   lines.push(`📊 A 总分 ${result.totalA}/110 · B 总分 ${result.totalB}/110`);
@@ -167,7 +167,7 @@ export function buildAssessmentShareText(result: AssessmentResult): string {
     lines.push('');
   }
 
-  lines.push('扫码测测你的一人公司适合度 → meoo.fun');
+  lines.push('微信搜一搜"OPC创业罗盘"');
   return lines.join('\n');
 }
 

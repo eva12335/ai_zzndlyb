@@ -32,11 +32,11 @@ export default function SaveProjectBtn() {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '6px',
-        padding: '10px 0',
-        margin: '12px 0',
-        borderRadius: '10px',
-        border: '1px solid var(--border-subtle)',
-        background: 'var(--surface)',
+        padding: '13px 0',
+        margin: '12px 0 24px 0',
+        borderRadius: '12px',
+        border: '1.5px solid var(--gold)',
+        background: 'rgba(197,160,89,0.08)',
         cursor: 'pointer',
       }}
     >

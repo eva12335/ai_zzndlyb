@@ -33,11 +33,13 @@ export default function SliderGroup() {
     ? new Decimal(store.acquisitionCostPerClient).times(store.newClientsPerMonth)
     : new Decimal(0);
   const monthlyRevenue = unitPrice.times(vol);
-  // 滑块净利 = 收入 - 变动成本 - 固定成本 - 获客成本（不含税费，见下方提示）
+  const depreciation = new Decimal(store.startupCapital).div(12);
+  // 滑块营业利润 = 收入 - 变动成本 - 固定成本 - 获客成本 - 折旧（不含税费，见下方提示）
   const netProfit = monthlyRevenue
     .minus(unitVC.times(vol))
     .minus(fixedCost)
-    .minus(acquisitionCost);
+    .minus(acquisitionCost)
+    .minus(depreciation);
 
   // ═══ 模式相关文案 ═══
   const priceUnit = isService ? t('roi.unit_yuan_h') : t('roi.unit_yuan');
@@ -157,7 +159,7 @@ export default function SliderGroup() {
         {/* 净利润 */}
         <View style={{ textAlign: 'center' }}>
           <Text style={{ fontSize: FS.caption, color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>
-            {t('roi.slider_profit')}
+            {t('roi.kpi_operating_profit')}
           </Text>
           <Text
             style={{
@@ -171,14 +173,6 @@ export default function SliderGroup() {
         </View>
       </View>
 
-      {/* 税费提示 */}
-      <Text style={{
-        fontSize: '9px', color: '#9298a8',
-        textAlign: 'center', marginTop: '6px', display: 'block',
-      }}
-      >
-        {t('roi.slider_tax_note')}
-      </Text>
     </View>
   );
 }

@@ -68,6 +68,8 @@ export default function ShareCard({
         position: 'relative',
         overflow: 'hidden',
         boxShadow: '0 4px 20px rgba(22,35,64,0.2)',
+        width: '100%',
+        boxSizing: 'border-box',
       }}
     >
       {/* 装饰光晕 */}
@@ -109,6 +111,8 @@ export default function ShareCard({
             lineHeight: 1.4,
             display: 'block',
             color: '#f0ece4',
+            overflow: 'hidden',
+            wordBreak: 'break-all',
           }}
         >
           {projectName}{'\n'}
@@ -139,32 +143,12 @@ export default function ShareCard({
               background: 'rgba(255,255,255,0.06)',
               borderRadius: '6px',
               marginBottom: '12px',
+              overflow: 'hidden',
             }}
           >
             💡 {insight}
           </Text>
         )}
-
-        {/* 底部扫码行 */}
-        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text style={{ fontSize: '10px', color: 'rgba(240,236,228,0.4)' }}>
-            {t('shared.share_cta')}
-          </Text>
-          <View
-            style={{
-              width: '32px',
-              height: '32px',
-              background: 'rgba(255,255,255,0.1)',
-              borderRadius: '4px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '8px',
-            }}
-          >
-            <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: '8px' }}>QR</Text>
-          </View>
-        </View>
       </View>
 
       {/* 分享按钮 */}

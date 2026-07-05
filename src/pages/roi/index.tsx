@@ -22,22 +22,19 @@ import BreakEvenChart from '../../components/roi/BreakEvenChart';
 import ReportTabs from '../../components/roi/ReportTabs';
 import ProfitDiagnosticCard from '../../components/roi/ProfitDiagnosticCard';
 import CapacityWarning from '../../components/roi/CapacityWarning';
-import ExportActions from '../../components/shared/ExportActions';
-import ShareCard from '../../components/shared/ShareCard';
-import SaveProjectBtn from '../../components/shared/SaveProjectBtn';
 import TabBar from '../../components/layout/TabBar';
 
 export default function RoiPage() {
   Taro.useShareAppMessage(() => {
     return {
-      title: '一人公司罗盘 — ROI 利润分析，算算你的项目能不能赚钱',
+      title: 'OPC创业罗盘 — ROI 利润分析，算算你的项目能不能赚钱',
       path: '/pages/roi/index',
     };
   });
 
   Taro.useShareTimeline(() => {
     return {
-      title: '一人公司罗盘 — ROI 利润分析，算算你的项目能不能赚钱',
+      title: 'OPC创业罗盘 — ROI 利润分析，算算你的项目能不能赚钱',
     };
   });
 
@@ -49,7 +46,6 @@ export default function RoiPage() {
   const calc = useCalculation();
 
   const isService = mode === 'service';
-  const [showShare, setShowShare] = useState(false);
   const [inputCollapsed, setInputCollapsed] = useState(false);
 
   const hasResult = !!(calc.breakEven && calc.profitLoss && calc.cashFlow);
@@ -65,7 +61,7 @@ export default function RoiPage() {
 
   return (
     <View style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 16px' }}>
-      <ScrollView style={{ flex: 1 }} scrollY>
+      <ScrollView style={{ flex: 1, paddingBottom: '56px' }} scrollY>
 
       {/* 模式切换 */}
       <View style={{ display: 'flex', marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
@@ -158,23 +154,7 @@ export default function RoiPage() {
             paymentCycle={store.paymentCycle}
             startupCapital={new Decimal(store.startupCapital)}
           />
-          <ExportActions
-            onShare={() => setShowShare(!showShare)}
-          />
-          {showShare && (
-            <ShareCard
-              projectName={store.projectName}
-              unitPrice={U}
-              breakEven={calc.breakEven!}
-              profitLoss={calc.profitLoss!}
-              cashFlow={calc.cashFlow!}
-              projection={calc.projection ?? null}
-              diagnostic={calc.diagnostic ?? null}
-              isService={isService}
-            />
-          )}
           {calc.diagnostic && <ProfitDiagnosticCard diagnostic={calc.diagnostic} />}
-          <SaveProjectBtn />
         </>
       )}
 

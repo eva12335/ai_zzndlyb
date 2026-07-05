@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "一人公司罗盘",
+    "name": "OPC创业罗盘",
     "tagline_line1": "你适合一人公司吗？",
     "tagline_highlight1": "心里没谱",
     "tagline_line2": "成本门儿清，",
@@ -187,7 +187,7 @@
     "language": "语言",
     "language_value": "简体中文",
     "about": "关于",
-    "about_value": "V2.1 · 一人公司罗盘 · meoo.fun",
+    "about_value": "V2.1 · OPC创业罗盘",
     "project_empty": "暂无保存的项目",
     "project_empty_hint": "在 ROI 页面保存项目后，将在此处显示",
     "project_load": "点击加载此项目"
@@ -198,7 +198,7 @@
     "export_pl": "复制利润表",
     "export_cf": "复制现金流",
     "share_btn": "分享",
-    "share_title": "一人公司罗盘",
+    "share_title": "OPC创业罗盘",
     "share_cta": "扫码测测你的项目",
     "coming_soon": "即将上线"
   }

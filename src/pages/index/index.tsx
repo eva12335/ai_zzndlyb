@@ -30,14 +30,14 @@ export default function IndexPage() {
 
   Taro.useShareAppMessage(() => {
     return {
-      title: '一人公司罗盘 — 你适合一人公司吗？',
+      title: 'OPC创业罗盘 — 你适合一人公司吗？',
       path: '/pages/index/index',
     };
   });
 
   Taro.useShareTimeline(() => {
     return {
-      title: '一人公司罗盘 — 你适合一人公司吗？',
+      title: 'OPC创业罗盘 — 你适合一人公司吗？',
     };
   });
 

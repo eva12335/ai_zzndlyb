@@ -19,14 +19,14 @@ import { useProjectStore, type SavedProject } from '../../store/useProjectStore'
 export default function ProfilePage() {
   Taro.useShareAppMessage(() => {
     return {
-      title: '一人公司罗盘 — 你的创业决策工具箱',
+      title: 'OPC创业罗盘 — 你的创业决策工具箱',
       path: '/pages/profile/index',
     };
   });
 
   Taro.useShareTimeline(() => {
     return {
-      title: '一人公司罗盘 — 你的创业决策工具箱',
+      title: 'OPC创业罗盘 — 你的创业决策工具箱',
     };
   });
 

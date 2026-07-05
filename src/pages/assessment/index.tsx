@@ -18,6 +18,7 @@ import RadarChart from '../../components/assessment/RadarChart';
 import TierBreakdown from '../../components/assessment/TierBreakdown';
 import SegmentCard from '../../components/assessment/SegmentCard';
 import AiReportCard from '../../components/assessment/AiReportCard';
+import AssessmentShareButton from '../../components/assessment/AssessmentShareButton';
 import TabBar from '../../components/layout/TabBar';
 import type { AiReportInput } from '../../types/ai';
 
@@ -108,6 +109,8 @@ export default function AssessmentPage() {
             onRetry={handleGenerateReport}
           />
         )}
+
+        <AssessmentShareButton result={result} />
 
         {/* 追问 AI — V2 彩蛋 */}
         <View style={{

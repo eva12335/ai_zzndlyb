@@ -44,18 +44,18 @@ export default function QuestionCard({ question, selected, onSelect }: QuestionC
         marginBottom: '10px',
       }}
       >
-        {question.dimension} · 第 {question.dimIndex}/5 题
+        {question.dimension}
       </View>
 
       <View>
         <View onClick={() => onSelect('A')} style={columnStyle('A', selected)}>
-          <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'A' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>A 栏</Text>
+          <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'A' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>A</Text>
           <Text>{question.statementA}</Text>
           {selected === 'A' && <View style={CHECK_STYLE}>✓</View>}
         </View>
 
         <View onClick={() => onSelect('B')} style={columnStyle('B', selected)}>
-          <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'B' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>B 栏</Text>
+          <Text style={{ fontSize: FS.label, fontWeight: 700, color: selected === 'B' ? 'var(--gold)' : 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>B</Text>
           <Text>{question.statementB}</Text>
           {selected === 'B' && <View style={CHECK_STYLE}>✓</View>}
         </View>

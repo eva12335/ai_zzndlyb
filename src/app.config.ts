@@ -8,7 +8,7 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#eef0f4',
-    navigationBarTitleText: '一人公司罗盘',
+    navigationBarTitleText: 'OPC创业罗盘',
     navigationBarTextStyle: 'black',
   },
   tabBar: {
