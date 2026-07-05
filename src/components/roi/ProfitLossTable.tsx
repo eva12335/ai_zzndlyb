@@ -75,9 +75,9 @@ export default function ProfitLossTable({ profitLoss, startupCapital }: Props) {
             }}
             >
               <Text style={{
-                fontSize: FS.caption,
+                fontSize: row.item.startsWith('*') ? '10px' : FS.caption,
                 fontWeight: row.isHighlight ? 700 : 400,
-                color: row.isHighlight ? 'var(--text-primary)' : 'var(--text-muted)',
+                color: row.item.startsWith('*') ? '#b8bec8' : row.isHighlight ? 'var(--text-primary)' : 'var(--text-muted)',
               }}
               >
                 {row.item}
@@ -94,9 +94,11 @@ export default function ProfitLossTable({ profitLoss, startupCapital }: Props) {
                 })(),
               }}
               >
-                {row.item.includes('毛利率') || row.item.includes('净利率')
-                  ? fmtPct(row.amount)
-                  : fmt(row.amount)}
+                {row.item.startsWith('*')
+                  ? ''
+                  : row.item.includes('毛利率') || row.item.includes('净利率')
+                    ? fmtPct(row.amount)
+                    : fmt(row.amount)}
               </Text>
             </View>
           );

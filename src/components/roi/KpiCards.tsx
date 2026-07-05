@@ -3,9 +3,9 @@
  *
  * 布局：3 行 × 2 列，紧凑驾驶舱，无分组标签
  *
- * Row 1: 月净利润 + 当前完成率      → 结果 + 进度
- * Row 2: 盈亏平衡量 + 盈亏平衡收入   → 量的门槛 + 额的门槛
- * Row 3: 营业利润 + 安全边际率      → 经营质量 + 抗风险缓冲
+ * Row 1: 月净利润 + 保本完成率      → 结果 + 进度
+ * Row 2: 保本销量 + 安全边际率       → 量的门槛 + 抗风险缓冲
+ * Row 3: 经营利润 + 目标差额        → 经营质量 + 目标差距
  */
 import { View, Text } from '@tarojs/components';
 import { useTranslation } from 'react-i18next';
@@ -18,20 +18,21 @@ interface Props {
   operatingProfit: Decimal | null;
   breakEven: BreakEvenOutput | null;
   currentVolume: Decimal;
+  targetProfit: Decimal;
 }
 
-export default function KpiCards({ netProfit, operatingProfit, breakEven, currentVolume }: Props) {
+export default function KpiCards({ netProfit, operatingProfit, breakEven, currentVolume, targetProfit }: Props) {
   const { t } = useTranslation();
   const store = useProjectStore();
   const isService = store.mode === 'service';
 
   const isLoss = netProfit && netProfit.lt(0);
   const bev = breakEven?.breakEvenVolume ?? null;
-  const ber = breakEven?.breakEvenRevenue ?? null;
   const completionRate = bev && bev.gt(0) ? currentVolume.div(bev).times(100) : null;
   const safetyMargin = bev && currentVolume.gt(0)
     ? currentVolume.minus(bev).div(currentVolume).times(100)
     : null;
+  const targetGap = operatingProfit ? operatingProfit.minus(targetProfit) : null;
 
   const unitLabel = isService ? 'h' : '';
 
@@ -39,23 +40,23 @@ export default function KpiCards({ netProfit, operatingProfit, breakEven, curren
     <View style={{
       background: '#ffffff',
       borderRadius: '16px',
-      padding: '16px',
+      padding: '10px 12px',
       border: '1px solid #edeff3',
-      marginBottom: '12px',
+      marginBottom: '8px',
     }}
     >
       {/* 分区标题 */}
       <Text style={{
-        fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
-        display: 'block', marginBottom: '12px',
+        fontSize: '14px', fontWeight: 700, color: '#1a1f2e',
+        display: 'block', marginBottom: '4px',
       }}
       >
         {t('roi.kpi_section_title')}
       </Text>
 
       {/* Row 1: 月净利润 + 当前完成率 */}
-      <View style={{ display: 'flex', marginBottom: '8px' }}>
-        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
+      <View style={{ display: 'flex', marginBottom: '5px' }}>
+        <View style={{ flex: 1, marginRight: '6px', minWidth: 0 }}>
           <KpiCard
             value={netProfit ? (netProfit.gte(0) ? '+¥' : '−¥') + netProfit.abs().toFixed(2) : '—'}
             label={t('roi.kpi_net_profit')}
@@ -73,9 +74,9 @@ export default function KpiCards({ netProfit, operatingProfit, breakEven, curren
         </View>
       </View>
 
-      {/* Row 2: 盈亏平衡量 + 盈亏平衡收入 */}
-      <View style={{ display: 'flex', marginBottom: '8px' }}>
-        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
+      {/* Row 2: 保本销量 + 安全边际率 */}
+      <View style={{ display: 'flex', marginBottom: '5px' }}>
+        <View style={{ flex: 1, marginRight: '6px', minWidth: 0 }}>
           <KpiCard
             value={bev ? bev.ceil().toNumber().toLocaleString('zh-CN') + unitLabel : '—'}
             label={t('roi.kpi_breakeven_vol')}
@@ -84,16 +85,16 @@ export default function KpiCards({ netProfit, operatingProfit, breakEven, curren
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>
           <KpiCard
-            value={ber ? '¥' + ber.toNumber().toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}
-            label={t('roi.kpi_breakeven_rev')}
-            valueColor="#517ea8"
+            value={safetyMargin ? safetyMargin.toFixed(2) + '%' : '—'}
+            label={t('roi.kpi_safety_margin')}
+            valueColor={safetyMargin && safetyMargin.gte(20) ? '#4a9c7c' : safetyMargin && safetyMargin.gte(0) ? '#e0883a' : '#d47563'}
           />
         </View>
       </View>
 
-      {/* Row 3: 营业利润 + 安全边际率 */}
+      {/* Row 3: 经营利润 + 目标差额 */}
       <View style={{ display: 'flex' }}>
-        <View style={{ flex: 1, marginRight: '8px', minWidth: 0 }}>
+        <View style={{ flex: 1, marginRight: '6px', minWidth: 0 }}>
           <KpiCard
             value={operatingProfit ? (operatingProfit.gte(0) ? '+¥' : '−¥') + operatingProfit.abs().toFixed(2) : '—'}
             label={t('roi.kpi_operating_profit')}
@@ -102,9 +103,9 @@ export default function KpiCards({ netProfit, operatingProfit, breakEven, curren
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>
           <KpiCard
-            value={safetyMargin ? safetyMargin.toFixed(2) + '%' : '—'}
-            label={t('roi.kpi_safety_margin')}
-            valueColor={safetyMargin && safetyMargin.gte(20) ? '#4a9c7c' : safetyMargin && safetyMargin.gte(0) ? '#e0883a' : '#d47563'}
+            value={targetGap ? (targetGap.gte(0) ? '+¥' : '−¥') + targetGap.abs().toFixed(2) : '—'}
+            label={t('roi.kpi_target_gap')}
+            valueColor={targetGap && targetGap.gte(0) ? '#4a9c7c' : '#d47563'}
           />
         </View>
       </View>
@@ -125,22 +126,22 @@ function KpiCard({
 }) {
   return (
     <View style={{
-      padding: '14px 8px', borderRadius: '12px', textAlign: 'center',
+      padding: '7px 5px', borderRadius: '8px', textAlign: 'center',
       background: bgColor,
       border: '1px solid ' + borderColor,
       overflow: 'hidden',
     }}
     >
       <Text style={{
-        fontSize: '16px', fontWeight: 600, color: valueColor,
-        display: 'block', marginBottom: '2px',
+        fontSize: '14px', fontWeight: 600, color: valueColor,
+        display: 'block', marginBottom: '0',
         overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
       }}
       >
         {value}
       </Text>
       <Text style={{
-        fontSize: '11px', color: '#9298a8',
+        fontSize: '9px', color: '#9298a8',
         overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
       }}
       >

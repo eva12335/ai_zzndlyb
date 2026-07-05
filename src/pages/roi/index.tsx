@@ -22,6 +22,7 @@ import BreakEvenChart from '../../components/roi/BreakEvenChart';
 import ReportTabs from '../../components/roi/ReportTabs';
 import ProfitDiagnosticCard from '../../components/roi/ProfitDiagnosticCard';
 import CapacityWarning from '../../components/roi/CapacityWarning';
+import SaveProjectBtn from '../../components/shared/SaveProjectBtn';
 import TabBar from '../../components/layout/TabBar';
 
 export default function RoiPage() {
@@ -52,6 +53,9 @@ export default function RoiPage() {
   const VC = new Decimal(store.unitVariableCost);
   const U = calc.derivedU ?? new Decimal(0);
   const V = calc.derivedV ?? new Decimal(0);
+  const AC = isService
+    ? new Decimal(store.acquisitionCostPerClient).times(store.newClientsPerMonth)
+    : new Decimal(0);
 
   useEffect(() => {
     if (calc.profitLoss) {
@@ -61,7 +65,7 @@ export default function RoiPage() {
 
   return (
     <View style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 16px' }}>
-      <ScrollView style={{ flex: 1, paddingBottom: '56px' }} scrollY>
+      <ScrollView style={{ flex: 1, paddingBottom: '100px' }} scrollY>
 
       {/* 模式切换 */}
       <View style={{ display: 'flex', marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
@@ -136,15 +140,17 @@ export default function RoiPage() {
             operatingProfit={calc.profitLoss!.operatingProfit}
             breakEven={calc.breakEven}
             currentVolume={V}
+            targetProfit={new Decimal(store.targetProfit ?? 0)}
           />
           <BreakEvenChart
             breakEvenVolume={calc.breakEven!.breakEvenVolume}
             breakEvenRevenue={calc.breakEven!.breakEvenRevenue}
             unitPrice={U}
             unitVariableCost={VC}
-            fixedCost={new Decimal(store.fixedCost).plus(store.tokenCost)}
+            fixedCost={new Decimal(store.fixedCost).plus(store.tokenCost).plus(new Decimal(store.startupCapital).div(12)).plus(AC)}
             volume={V}
             projection={calc.projection ?? undefined}
+            isService={isService}
           />
           <SliderGroup />
           <CapacityWarning volume={V} />
@@ -155,6 +161,7 @@ export default function RoiPage() {
             startupCapital={new Decimal(store.startupCapital)}
           />
           {calc.diagnostic && <ProfitDiagnosticCard diagnostic={calc.diagnostic} />}
+          <SaveProjectBtn />
         </>
       )}
 

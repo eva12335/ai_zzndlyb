@@ -52,7 +52,8 @@ export function useCalculation() {
     let V = store.volume ? new Decimal(store.volume) : new Decimal(0);
     const FC = new Decimal(store.fixedCost);
     const TC = new Decimal(store.tokenCost);
-    const totalFC = FC.plus(TC);
+    const DEP = new Decimal(store.startupCapital).div(12);
+    const totalFC = FC.plus(TC).plus(DEP);
 
     // 定价或销量留空时自动推导（PRD §1.3：反推是核心差异化）
     if (totalFC.gt(0)) {

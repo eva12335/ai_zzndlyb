@@ -34,7 +34,7 @@ export default function SliderGroup() {
     : new Decimal(0);
   const monthlyRevenue = unitPrice.times(vol);
   const depreciation = new Decimal(store.startupCapital).div(12);
-  // 滑块营业利润 = 收入 - 变动成本 - 固定成本 - 获客成本 - 折旧（不含税费，见下方提示）
+  // 滑块经营利润 = 收入 - 变动成本 - 固定成本 - 获客成本 - 折旧（不含税费）
   const netProfit = monthlyRevenue
     .minus(unitVC.times(vol))
     .minus(fixedCost)
@@ -52,9 +52,9 @@ export default function SliderGroup() {
       style={{
         background: 'var(--surface)',
         borderRadius: '16px',
-        padding: '16px',
+        padding: '12px',
         border: '1px solid var(--border-subtle)',
-        marginBottom: '12px',
+        marginBottom: '8px',
       }}
     >
       {/* 标题 */}
@@ -64,15 +64,15 @@ export default function SliderGroup() {
           fontWeight: 700,
           color: 'var(--text-primary)',
           display: 'block',
-          marginBottom: '16px',
+          marginBottom: '10px',
         }}
       >
         {t('roi.slider_title')}
       </Text>
 
       {/* ═══ 滑块 1：定价 / 时薪 ═══ */}
-      <View style={{ marginBottom: '16px' }}>
-        <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
+      <View style={{ marginBottom: '10px' }}>
+        <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
           <Text style={{ fontSize: FS.label, fontWeight: 500, color: 'var(--text-muted)' }}>
             {isService ? t('roi.field_hourly_rate') : t('roi.field_price')}
           </Text>
@@ -99,8 +99,8 @@ export default function SliderGroup() {
       </View>
 
       {/* ═══ 滑块 2：销量 / 计费小时 ═══ */}
-      <View style={{ marginBottom: '16px' }}>
-        <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
+      <View style={{ marginBottom: '10px' }}>
+        <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
           <Text style={{ fontSize: FS.label, fontWeight: 500, color: 'var(--text-muted)' }}>
             {isService ? t('roi.field_billable_hours') : t('roi.field_volume')}
           </Text>
@@ -131,9 +131,9 @@ export default function SliderGroup() {
         style={{
           display: 'flex',
           justifyContent: 'space-around',
-          padding: '12px 8px',
+          padding: '8px 6px',
           background: 'rgba(22,35,64,0.03)',
-          borderRadius: '12px',
+          borderRadius: '10px',
           border: '1px solid var(--border-subtle)',
         }}
       >

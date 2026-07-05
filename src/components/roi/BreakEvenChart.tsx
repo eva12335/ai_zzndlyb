@@ -18,26 +18,27 @@ interface Props {
   fixedCost: Decimal;
   volume: Decimal;
   projection?: RevenueProjectionOutput;
+  isService?: boolean;
 }
 
 const CANVAS_ID = 'be-canvas';
 
-/** 金额短格式 */
+/** 金额短格式（保留一位小数防重名） */
 function fmtY(v: number): string {
-  if (v >= 10000) return '¥' + (v / 10000).toFixed(0) + 'w';
+  if (v >= 10000) return '¥' + (v / 10000).toFixed(1) + 'w';
   if (v >= 1000) return '¥' + (v / 1000).toFixed(1) + 'k';
   return '¥' + v.toFixed(0);
 }
 
 export default function BreakEvenChart({
-  breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume, projection,
+  breakEvenVolume, breakEvenRevenue, unitPrice, unitVariableCost, fixedCost, volume, projection, isService,
 }: Props) {
   // 响应式 Canvas 尺寸：取屏幕宽度 - 页面边距，上限 340px
   const [W, H] = useMemo(() => {
     try {
       const sw = Taro.getSystemInfoSync().windowWidth;
       const w = Math.max(260, Math.min(sw - 80, 340));
-      const h = Math.round(w * 0.78);
+      const h = Math.round(w * 0.72);
       return [w, h];
     } catch {
       return [300, 234];
@@ -45,9 +46,9 @@ export default function BreakEvenChart({
   }, []);
 
   const PAD = useMemo(() => ({
-    top: Math.round(H * 0.08),
+    top: Math.round(H * 0.05),
     right: Math.round(W * 0.06),
-    bottom: Math.round(H * 0.16),
+    bottom: Math.round(H * 0.13),
     left: Math.round(W * 0.17),
   }), [W, H]);
 
@@ -115,7 +116,7 @@ export default function BreakEvenChart({
       const v = (maxV / 4) * i;
       const x = toX(v);
       const label = v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v.toFixed(0);
-      ctx.fillText(label, x, PAD.top + CH + 5);
+      ctx.fillText(isService ? label + 'h' : label, x, PAD.top + CH + 5);
     }
 
     // ── 总收入线（绿色） ──
@@ -167,8 +168,89 @@ export default function BreakEvenChart({
     ctx.setFillStyle('rgba(197,160,89,0.15)');
     ctx.fill();
 
+    // ── 盈亏平衡点坐标标签（交点右上方，不压线） ──
+    const volUnit = isService ? 'h' : '件';
+    const beLabel = `${Math.ceil(BEV)}${volUnit}（¥${BER.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}）`;
+    ctx.setFontSize(10);
+    ctx.setFillStyle('#C5A059');
+    // 放交点右侧，若太靠右则放左侧
+    const labelW = ctx.measureText(beLabel).width;
+    const rightEdge = beX + 18 + labelW;
+    if (rightEdge > PAD.left + CW) {
+      ctx.setTextAlign('right');
+      ctx.fillText(beLabel, beX - 14, beY - 12);
+    } else {
+      ctx.setTextAlign('left');
+      ctx.fillText(beLabel, beX + 14, beY - 8);
+    }
+
+    // ── 盈利/亏损区淡色填充 ──
+    // 盈利区（平衡点右侧，总收入 > 总成本）：浅绿
+    if (BEV < maxV) {
+      ctx.beginPath();
+      // 总收入线从 BEV 到 maxV
+      for (let i = 0; i <= pts; i++) {
+        const v = BEV + ((maxV - BEV) / pts) * i;
+        const rev = U * v;
+        const x = toX(v);
+        const y = toY(rev);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      // 总成本线从 maxV 回到 BEV
+      for (let i = pts; i >= 0; i--) {
+        const v = BEV + ((maxV - BEV) / pts) * i;
+        const cost = FC + VC * v;
+        const x = toX(v);
+        const y = toY(cost);
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.setFillStyle('rgba(92,184,148,0.06)');
+      ctx.fill();
+    }
+    // 亏损区（平衡点左侧，总成本 > 总收入）：浅红
+    if (BEV > 0) {
+      ctx.beginPath();
+      for (let i = 0; i <= pts; i++) {
+        const v = (BEV / pts) * i;
+        const cost = FC + VC * v;
+        const x = toX(v);
+        const y = toY(cost);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      for (let i = pts; i >= 0; i--) {
+        const v = (BEV / pts) * i;
+        const rev = U * v;
+        const x = toX(v);
+        const y = toY(rev);
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.setFillStyle('rgba(224,134,118,0.06)');
+      ctx.fill();
+    }
+
+    // ── 当前销量标记（轴内三角 + 标签） ──
+    if (V > 0) {
+      const vx = toX(V);
+      const vy = PAD.top + CH;
+      // 倒三角指向 X 轴
+      ctx.beginPath();
+      ctx.moveTo(vx - 4, vy - 10);
+      ctx.lineTo(vx + 4, vy - 10);
+      ctx.lineTo(vx, vy - 3);
+      ctx.closePath();
+      ctx.setFillStyle('#517ea8');
+      ctx.fill();
+      ctx.setFontSize(9);
+      ctx.setFillStyle('#517ea8');
+      ctx.setTextAlign('center');
+      ctx.setTextBaseline('bottom');
+      ctx.fillText(`当前 ${V.toFixed(0)}${volUnit}`, vx, vy - 14);
+    }
+
     // ── 图例 ──
-    const legendY = PAD.top + CH + Math.round(H * 0.09);
+    const legendY = PAD.top + CH + Math.round(H * 0.095);
     const legX1 = PAD.left + Math.round(W * 0.03);
     const legX2 = PAD.left + Math.round(W * 0.30);
     const legX3 = PAD.left + Math.round(W * 0.55);
@@ -213,14 +295,14 @@ export default function BreakEvenChart({
 
   return (
     <View style={{
-      background: '#ffffff', borderRadius: '16px', padding: '12px',
-      border: '1px solid #edeff3', marginTop: '12px',
+      background: '#ffffff', borderRadius: '16px', padding: '10px',
+      border: '1px solid #edeff3', marginTop: '10px',
       overflow: 'hidden',
     }}
     >
       <Text style={{
-        fontSize: '16px', fontWeight: 700, color: '#1a1f2e',
-        display: 'block', marginBottom: '4px',
+        fontSize: '15px', fontWeight: 700, color: '#1a1f2e',
+        display: 'block', marginBottom: '2px',
       }}
       >
         盈亏平衡分析

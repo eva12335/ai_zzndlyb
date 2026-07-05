@@ -289,7 +289,6 @@ export default function AssessmentShareButton({ result }: Props) {
         onClick={handleShare}
         style={{
           marginTop: '16px',
-          width: '100%',
           padding: '14px',
           borderRadius: '12px',
           textAlign: 'center',
@@ -301,17 +300,16 @@ export default function AssessmentShareButton({ result }: Props) {
         </Text>
       </View>
 
-      {/* 隐藏 Canvas：opacity:0 不可见但正常渲染，确保 canvasToTempFilePath 正确导出 */}
+      {/* 隐藏 Canvas：visibility:hidden 渲染但不显示，不闪不退 */}
       <Canvas
         canvasId={CANVAS_ID}
         style={{
-          position: 'absolute',
-          left: '50%',
+          position: 'fixed',
+          left: '0',
           top: '0',
           width: `${W}px`,
           height: `${H}px`,
-          opacity: '0',
-          transform: 'translateX(-50%)',
+          visibility: 'hidden',
         }}
       />
     </View>

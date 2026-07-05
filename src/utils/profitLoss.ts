@@ -71,6 +71,7 @@ export function calculateProfitLoss(input: PnLInput): ProfitLossOutput {
     { item: '三、营业利润', amount: operatingProfit, isHighlight: true },
     { item: '减：增值税', amount: taxResult.vat, indent: true },
     { item: '减：所得税', amount: taxResult.incomeTax, indent: true },
+    { item: '* 税费按现行政策估算，实际随法规调整', amount: new Decimal(0), indent: true },
     { item: '四、净利润', amount: netProfit, isHighlight: true },
     { item: `净利率`, amount: netMargin.times(100), isHighlight: true },
   ];
