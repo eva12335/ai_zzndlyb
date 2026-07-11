@@ -18,6 +18,7 @@
     "postinstall": "weapp-tw patch",
     "new": "taro new",
     "preview:weapp": "taro build --type weapp --preview",
+    "deploy:web": "pnpm build:web && cp -r dist-web/* dist/ && meoo deploy --skip-build --force && pnpm build:weapp",
     "//validate": "项目唯一校验入口：并发跑 eslint(零警告) + tsc(类型检查)。查看输出务必完整读取，禁止用 head/tail 截断——错误可能出现在任意位置，截断会漏报。",
     "validate": "pnpm exec concurrently --kill-others-on-fail --kill-signal SIGKILL -n lint,tsc -c red,blue \"eslint 'src/**/*.{js,jsx,ts,tsx,css}' --max-warnings=0 --quiet\" \"tsc --noEmit --skipLibCheck\""
   },

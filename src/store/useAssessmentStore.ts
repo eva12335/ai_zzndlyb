@@ -1,12 +1,14 @@
 /**
- * 测评状态管理
+ * 测评状态管理（支持持久化，退出后可恢复进度）
  * 来源：TECH_DESIGN §3.2 + PRD §7 测评表
  */
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { AssessmentResult } from '../types/assessment';
 import { QUESTION_BANK } from '../utils/assessment';
 import { runAssessmentPipeline } from '../utils/assessmentEngine';
 import { useUserStore } from './useUserStore';
+import { taroStorage } from './storage';
 
 export type AssessPhase = 'answering' | 'result' | 'report';
 
@@ -30,7 +32,9 @@ interface AssessmentState {
   resetAssessment: () => void;
 }
 
-export const useAssessmentStore = create<AssessmentState>((set, get) => ({
+export const useAssessmentStore = create<AssessmentState>()(
+  persist(
+    (set, get) => ({
   phase: 'answering',
   currentQuestionIndex: 0,
   answers: {},
@@ -79,4 +83,11 @@ export const useAssessmentStore = create<AssessmentState>((set, get) => ({
     answers: {},
     result: null,
   }),
-}));
+}),
+{
+  name: 'solopreneur-assessment',
+  storage: taroStorage,
+  // 持久化全部状态：进度 + 结果
+  partialize: (state) => state,
+},
+));

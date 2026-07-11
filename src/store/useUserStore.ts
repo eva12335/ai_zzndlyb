@@ -8,6 +8,7 @@
  * - 昵称/头像为纯个性化设置，不用于追踪
  */
 import { create } from 'zustand';
+import { taroStorage } from './storage';
 import { persist } from 'zustand/middleware';
 import Taro from '@tarojs/taro';
 
@@ -41,35 +42,6 @@ function simpleHash(str: string): string {
 function randomId(): string {
   return 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
 }
-
-// Taro 存储适配器，满足 zustand persist Storage 接口
-const taroStorage = {
-  getItem: (name: string) => {
-    try {
-      const value = Taro.getStorageSync(name);
-      if (value) {
-        return JSON.parse(value);
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  },
-  setItem: (name: string, value: unknown): void => {
-    try {
-      Taro.setStorageSync(name, JSON.stringify(value));
-    } catch {
-      // 静默处理写入失败
-    }
-  },
-  removeItem: (name: string): void => {
-    try {
-      Taro.removeStorageSync(name);
-    } catch {
-      // 静默处理删除失败
-    }
-  },
-};
 
 export const useUserStore = create<UserState>()(
   persist(

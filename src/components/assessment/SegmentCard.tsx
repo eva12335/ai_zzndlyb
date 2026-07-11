@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FS } from '../../constants/fonts';
 import type { AssessmentResult } from '../../types/assessment';
 import { getCTA } from '../../utils/assessmentEngine';
+import AssessmentShareButton from './AssessmentShareButton';
 
 interface Props {
   result: AssessmentResult;
@@ -76,10 +77,15 @@ export default function SegmentCard({ result, onGenerateReport }: Props) {
         >
           {`"你的画像：${result.segment}" — ${ctaText}`}
         </Text>
+
+        {/* 分享按钮 */}
+        <AssessmentShareButton result={result} />
+
+        {/* 生成 AI 报告按钮 */}
         <View
           onClick={onGenerateReport}
           style={{
-            padding: '13px', borderRadius: '12px',
+            padding: '13px', borderRadius: '12px', marginTop: '10px',
             background: 'linear-gradient(135deg, #162340, #1e3054)',
           }}
         >
@@ -92,7 +98,7 @@ export default function SegmentCard({ result, onGenerateReport }: Props) {
           marginTop: '8px', display: 'block',
         }}
         >
-          填写 ROI 成本数据后，可解锁具体金额和财务路线图
+          AI 深度分析报告即将上线，敬请期待
         </Text>
       </View>
     </View>

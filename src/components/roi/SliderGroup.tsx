@@ -2,7 +2,8 @@
  * 参数联动探索卡片 —— 双滑块实时调整定价 & 销量，即时反馈月收入与净利润
  * 来源：TECH_DESIGN §6 盈亏分析面板
  */
-import { View, Text, Slider } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
+import Slider from '../shared/Slider';
 import { useTranslation } from 'react-i18next';
 import Decimal from 'decimal.js';
 import { useProjectStore } from '../../store/useProjectStore';
@@ -19,7 +20,7 @@ export default function SliderGroup() {
   const maxVolume = isService ? 100 : 10000;
   const priceStep = isService ? 20 : 1;
 
-  // ═══ 当前值（回退默认） ═══
+  // ═══ 当前值（回退默认：产品型 25元/1200件，服务型 250元/h/80h） ═══
   const price = store.unitPrice ?? (isService ? 250 : 25);
   const volume = store.volume ?? (isService ? 80 : 1200);
 
@@ -82,15 +83,14 @@ export default function SliderGroup() {
           </Text>
         </View>
         <Slider
+          label=""
           min={0}
           max={maxPrice}
           step={priceStep}
           value={price}
-          activeColor="var(--gold)"
-          backgroundColor="rgba(212,168,92,0.15)"
-          blockColor="var(--gold)"
-          blockSize={20}
-          onChanging={(e) => store.setField('unitPrice', e.detail.value)}
+          unit={priceUnit}
+          color="var(--gold)"
+          onChange={(v) => store.setField('unitPrice', v)}
         />
         <View style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2px' }}>
           <Text style={{ fontSize: FS.caption, color: 'var(--text-muted)' }}>0 {priceUnit}</Text>
@@ -110,15 +110,14 @@ export default function SliderGroup() {
           </Text>
         </View>
         <Slider
+          label=""
           min={0}
           max={maxVolume}
           step={1}
           value={volume}
-          activeColor="var(--blue)"
-          backgroundColor="rgba(94,134,182,0.15)"
-          blockColor="var(--blue)"
-          blockSize={20}
-          onChanging={(e) => store.setField('volume', e.detail.value)}
+          unit={volUnitSuffix}
+          color="var(--blue)"
+          onChange={(v) => store.setField('volume', v)}
         />
         <View style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2px' }}>
           <Text style={{ fontSize: FS.caption, color: 'var(--text-muted)' }}>0{volUnitSuffix}</Text>

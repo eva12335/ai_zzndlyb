@@ -6,7 +6,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no,address=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>一人公司罗盘</title>
+  <title>OPC创业罗盘</title>
   <script><%= htmlWebpackPlugin.options.script %></script>
   <style>
     html, body {
@@ -18,6 +18,22 @@
     }
     #app {
       overflow-x: hidden;
+    }
+    /* 桌面端：手机预览框居中，防止全屏拉伸 */
+    @media (min-width: 450px) {
+      html {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      body {
+        max-width: 420px;
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+        box-shadow: 0 0 30px rgba(0,0,0,0.12);
+        position: relative;
+      }
     }
   </style>
 </head>

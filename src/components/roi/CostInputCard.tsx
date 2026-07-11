@@ -74,7 +74,7 @@ export default function CostInputCard() {
           </Text>
           <View style={{ position: 'relative' }}>
             <Input
-              type="number"
+              type="digit"
               value={String(store.fixedCost || '')}
               onInput={(e) => store.setField('fixedCost', Number(e.detail.value))}
               placeholder="20,000"
@@ -95,7 +95,7 @@ export default function CostInputCard() {
             </Text>
             <View style={{ position: 'relative' }}>
               <Input
-                type="number"
+                type="digit"
                 value={String(store.unitVariableCost || '')}
                 onInput={(e) => store.setField('unitVariableCost', Number(e.detail.value))}
                 placeholder="5.5"
@@ -115,7 +115,7 @@ export default function CostInputCard() {
             </Text>
             <View style={{ position: 'relative' }}>
               <Input
-                type="number"
+                type="digit"
                 value={String(store.tokenCost || '')}
                 onInput={(e) => store.setField('tokenCost', Number(e.detail.value))}
                 placeholder="1,500"
@@ -139,7 +139,7 @@ export default function CostInputCard() {
           </Text>
           <View style={{ position: 'relative' }}>
             <Input
-              type="number"
+              type="digit"
               value={store.unitPrice != null ? String(store.unitPrice) : ''}
               onInput={(e) => store.setField('unitPrice', e.detail.value ? Number(e.detail.value) : null)}
               placeholder={t('roi.placeholder_derive')}
@@ -160,7 +160,7 @@ export default function CostInputCard() {
           </Text>
           <View style={{ position: 'relative' }}>
             <Input
-              type="number"
+              type="digit"
               value={store.volume != null ? String(store.volume) : ''}
               onInput={(e) => store.setField('volume', e.detail.value ? Number(e.detail.value) : null)}
               placeholder={t('roi.placeholder_derive')}
@@ -185,7 +185,7 @@ export default function CostInputCard() {
               {t('roi.field_token')} <Text style={{ fontSize: FS.caption, color: 'var(--teal)' }}>{t('roi.label_default_0')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={String(store.tokenCost || '')}
+              <Input type="digit" value={String(store.tokenCost || '')}
                 onInput={(e) => store.setField('tokenCost', Number(e.detail.value))}
                 placeholder={t('roi.placeholder_token')}
                 style={{ width: '100%', padding: '9px 40px 9px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontSize: FS.body, color: 'var(--teal)' }}
@@ -207,7 +207,7 @@ export default function CostInputCard() {
               {t('roi.field_acq_per_client')} <Text style={{ fontSize: FS.caption, color: 'var(--text-muted)' }}>{t('roi.label_optional')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={String(store.acquisitionCostPerClient || '')}
+              <Input type="digit" value={String(store.acquisitionCostPerClient || '')}
                 onInput={(e) => store.setField('acquisitionCostPerClient', Number(e.detail.value))}
                 placeholder={t('roi.placeholder_acq')}
                 style={{ width: '100%', padding: '9px 40px 9px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontSize: FS.body, color: 'var(--red)' }}
@@ -220,7 +220,7 @@ export default function CostInputCard() {
               {t('roi.field_new_clients')} <Text style={{ fontSize: FS.caption, color: 'var(--teal)' }}>{t('roi.label_default_1')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={String(store.newClientsPerMonth || '')}
+              <Input type="digit" value={String(store.newClientsPerMonth || '')}
                 onInput={(e) => store.setField('newClientsPerMonth', Number(e.detail.value))}
                 style={{ width: '100%', padding: '9px 40px 9px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontSize: FS.body, color: 'var(--red)' }}
               />

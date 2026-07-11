@@ -313,15 +313,6 @@ export default function BreakEvenChart({
           style={{ width: `${W}px`, height: `${H}px`, display: 'block', flexShrink: 0 }}
         />
       </View>
-      {projection && projection.breakEvenMonth != null && (
-        <Text style={{
-          display: 'block', marginTop: '6px', fontSize: '13px',
-          color: '#517ea8', textAlign: 'center', fontWeight: 600,
-        }}
-        >
-          按增长率，第 {projection.breakEvenMonth} 个月扭亏
-        </Text>
-      )}
     </View>
   );
 }

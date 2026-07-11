@@ -1,17 +1,19 @@
 /**
- * AI 深度报告 Hook
+ * AI 深度报告 Hook（轻量化版）
  * 来源：PRD §8.2 + TECH_DESIGN §3.5.3
  *
- * 流程：生成 → 调云函数(8s超时) → 校验 → 成功/降级
+ * 流程（2026-07 优化）：
+ * 1. 本地模板报告立即可用（0 延迟）
+ * 2. 后台调云函数只获取 AI segmentAnalysis
+ * 3. 成功 → 替换 segmentAnalysis；失败 → 保留模板版本
  */
 import { useState, useCallback } from 'react';
 import { callAiReport } from '../services/cloudFunctions';
-import { validateAiReport } from '../utils/validateAiReport';
 import { DIMENSION_NAMES } from '../utils/assessment';
-import type { AiReportInput, AiReportOutput } from '../types/ai';
+import type { AiReportInput, AiReportOutput, RoadmapItem } from '../types/ai';
 
 // ═══════════════════════════════════════════
-// 段位分析本地降级模板（与 SegmentCard 复用文案）
+// 段位分析本地模板（与 SegmentCard 复用文案）
 // ═══════════════════════════════════════════
 
 const FALLBACK_ANALYSES: Record<string, string> = {
@@ -30,7 +32,7 @@ const FALLBACK_ANALYSES: Record<string, string> = {
 };
 
 // ═══════════════════════════════════════════
-// 维度预写文案（机会雷达 · 本地降级用）
+// 维度预写文案（机会雷达）
 // ═══════════════════════════════════════════
 
 const DIM_GUIDES: Record<string, { low: string; mid: string }> = {
@@ -99,11 +101,65 @@ const DIM_ACTIONS: Record<string, { action: string; impact: string }> = {
 };
 
 // ═══════════════════════════════════════════
-// 本地降级报告生成（纯函数，零随机）
+// 财务计算辅助
 // ═══════════════════════════════════════════
 
-function buildFallbackReport(input: AiReportInput): AiReportOutput {
-  const { dimensionScores, segmentLabel } = input;
+/** 计算月度利润 */
+function calcMonthlyProfit(costData: NonNullable<AiReportInput['costData']>): number {
+  const { fixedCost, unitVariableCost = 0, unitPrice = 0, volume = 0, tokenCost = 0, acquisitionCost = 0 } = costData;
+  const revenue = unitPrice * volume;
+  const varCost = unitVariableCost * volume + acquisitionCost * volume;
+  return revenue - varCost - fixedCost - tokenCost;
+}
+
+/** 计算每提升 1 分的预估月度收益 */
+function calcPointValue(profit: number, fixedCost: number, tokenCost: number): number {
+  const totalFixed = fixedCost + tokenCost;
+  // 每分 ≈ 利润绝对值的 5%，但不低于固定成本的 1%
+  return Math.round(Math.max(Math.abs(profit) * 0.05, totalFixed * 0.01));
+}
+
+/** 格式化金额 */
+function fmt(yen: number): string {
+  return `+¥${yen.toLocaleString()}/月`;
+}
+
+/** 生成改进路线图 */
+function buildRoadmap(costData: NonNullable<AiReportInput['costData']>): RoadmapItem[] {
+  const profit = calcMonthlyProfit(costData);
+  const isLosing = profit < 0;
+
+  const milestones = [
+    { timeline: '3个月', ratio: 0.08 },
+    { timeline: '6个月', ratio: 0.18 },
+    { timeline: '12个月', ratio: 0.35 },
+  ];
+
+  return milestones.map((m) => {
+    if (isLosing) {
+      const reduced = profit * (1 - m.ratio);
+      const verb = reduced < 0 ? '缩小亏损至' : '实现盈亏平衡+';
+      return {
+        timeline: m.timeline,
+        target: `补齐 1-2 个短板维度，优化交付效率`,
+        expectedProfit: `${verb} ¥${Math.round(Math.abs(reduced)).toLocaleString()}/月`,
+      };
+    }
+    const improved = Math.round(profit * (1 + m.ratio));
+    return {
+      timeline: m.timeline,
+      target: m.timeline === '3个月' ? '优化 1-2 个短板维度，降低获客成本' : m.timeline === '6个月' ? '短板维度提升至中等水平，客单价改善' : '核心维度达到健康区间，业务稳定盈利',
+      expectedProfit: `月利润 ¥${improved.toLocaleString()}`,
+    };
+  });
+}
+
+// ═══════════════════════════════════════════
+// 本地模板报告生成（纯函数，零延迟）
+// ═══════════════════════════════════════════
+
+function buildTemplateReport(input: AiReportInput): AiReportOutput {
+  const { dimensionScores, segmentLabel, costData } = input;
 
   // 按分数升序排列所有维度
   const ranked = DIMENSION_NAMES
@@ -112,9 +168,14 @@ function buildFallbackReport(input: AiReportInput): AiReportOutput {
 
   // 只有确实偏低的维度（< 6 分）才作为"机会"展示
   const realGaps = ranked.filter((item) => item.score < 6);
-  // 如果全都 ≥ 6 分，取最低 2 个作为"可优化项"而非"短板"
   const candidates = realGaps.length > 0 ? realGaps.slice(0, 3) : ranked.slice(0, 2);
   const allHigh = realGaps.length === 0;
+
+  // 有成本数据时预计算经济影响
+  const profit = costData ? calcMonthlyProfit(costData) : 0;
+  const pointValue = costData
+    ? calcPointValue(profit, costData.fixedCost, costData.tokenCost)
+    : 0;
 
   const opportunities = candidates.map((item, i) => {
     const guide = DIM_GUIDES[item.dim];
@@ -122,11 +183,15 @@ function buildFallbackReport(input: AiReportInput): AiReportOutput {
       ? (guide?.mid || `${item.dim}表现不错，继续保持并寻找突破口`)
       : item.score < 5 ? guide?.low : guide?.mid;
 
+    // 每维度各占不同比例的改善空间（ROI 最高的占比最大）
+    const shareRatios = [0.45, 0.30, 0.25];
+    const impactAmount = costData ? Math.round(pointValue * (i < shareRatios.length ? shareRatios[i] : 0.25)) : undefined;
+
     return {
       dimension: item.dim,
       currentScore: item.score,
       targetScore: Math.min(item.score + 2, 10),
-      financialImpact: undefined,
+      financialImpact: impactAmount ? fmt(impactAmount) : undefined,
       directionGuide: description || (allHigh ? '该维度处于健康水平，可作为你的核心优势继续打磨' : `建议优先提升${item.dim}——这是 ROI 最高的改进方向`),
       roiRank: i + 1,
     };
@@ -150,8 +215,12 @@ function buildFallbackReport(input: AiReportInput): AiReportOutput {
     segmentAnalysis: FALLBACK_ANALYSES[segmentLabel] ?? '基于你的测评分数的画像分析。',
     opportunities,
     actionItems,
-    // 降级报告不含路线图——无成本数据时始终显示 🔓 占位
   };
+
+  // 有成本数据时附加路线图
+  if (costData) {
+    result.roadmap = buildRoadmap(costData);
+  }
 
   return result;
 }
@@ -162,42 +231,46 @@ function buildFallbackReport(input: AiReportInput): AiReportOutput {
 
 interface UseAiReportReturn {
   loading: boolean;
+  aiOptimizing: boolean;        // AI 后台优化中（报告已展示）
   error: string | null;
   report: AiReportOutput | null;
-  isFallback: boolean;
   generateReport: (input: AiReportInput) => Promise<void>;
 }
 
 export function useAiReport(): UseAiReportReturn {
   const [loading, setLoading] = useState(false);
+  const [aiOptimizing, setAiOptimizing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<AiReportOutput | null>(null);
-  const [isFallback, setIsFallback] = useState(false);
 
   const generateReport = useCallback(async (input: AiReportInput) => {
     setLoading(true);
     setError(null);
-    setReport(null);
-    setIsFallback(false);
 
-    const hasCostData = !!input.costData;
+    // 1. 本地模板即时展示（0 延迟）
+    const templateReport = buildTemplateReport(input);
+    setReport(templateReport);
+    setLoading(false);
 
+    // 2. 后台调 AI 润色 segmentAnalysis
+    setAiOptimizing(true);
     try {
-      const result = await callAiReport(input);
+      const result = await callAiReport({
+        totalScore: input.totalScore,
+        dimensionScores: input.dimensionScores,
+        segmentLabel: input.segmentLabel,
+      });
 
-      if (validateAiReport(result, input.segmentLabel, hasCostData)) {
-        setReport(result);
-      } else {
-        setReport(buildFallbackReport(input));
-        setIsFallback(true);
+      const aiAnalysis = result?.segmentAnalysis?.trim();
+      if (aiAnalysis && aiAnalysis.length >= 10) {
+        setReport((prev) => prev ? { ...prev, segmentAnalysis: aiAnalysis } : prev);
       }
-    } catch {
-      setReport(buildFallbackReport(input));
-      setIsFallback(true);
+    } catch (e) {
+      console.warn('[useAiReport] AI 润色失败:', e instanceof Error ? e.message : e);
     } finally {
-      setLoading(false);
+      setAiOptimizing(false);
     }
   }, []);
 
-  return { loading, error, report, isFallback, generateReport };
+  return { loading, aiOptimizing, error, report, generateReport };
 }

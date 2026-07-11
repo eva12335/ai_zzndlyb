@@ -3,14 +3,11 @@
  * 来源：PRD §7
  */
 import { View, Text } from '@tarojs/components';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import Taro from '@tarojs/taro';
 import { useTranslation } from 'react-i18next';
-import { FS } from '../../constants/fonts';
 import { useAssessmentStore } from '../../store/useAssessmentStore';
-import { useProjectStore } from '../../store/useProjectStore';
 import { QUESTION_BANK } from '../../utils/assessment';
-import { useAiReport } from '../../hooks/useAiReport';
 import QuestionCard from '../../components/assessment/QuestionCard';
 import ProgressBar from '../../components/assessment/ProgressBar';
 import ResultRing from '../../components/assessment/ResultRing';
@@ -18,9 +15,7 @@ import RadarChart from '../../components/assessment/RadarChart';
 import TierBreakdown from '../../components/assessment/TierBreakdown';
 import SegmentCard from '../../components/assessment/SegmentCard';
 import AiReportCard from '../../components/assessment/AiReportCard';
-import AssessmentShareButton from '../../components/assessment/AssessmentShareButton';
 import TabBar from '../../components/layout/TabBar';
-import type { AiReportInput } from '../../types/ai';
 
 const btnBase = {
   flex: 1, padding: '14px', borderRadius: '12px', textAlign: 'center' as const,
@@ -50,45 +45,7 @@ export default function AssessmentPage() {
   const next = () => useAssessmentStore.getState().nextQuestion();
   const prev = () => useAssessmentStore.getState().prevQuestion();
   const submit = () => useAssessmentStore.getState().submitAssessment();
-  const { loading, error, report, isFallback, generateReport } = useAiReport();
   const [showReport, setShowReport] = useState(false);
-
-  // 构建 AI 报告输入
-  const handleGenerateReport = useCallback(() => {
-    const currentResult = useAssessmentStore.getState().result;
-    if (!currentResult) return;
-    setShowReport(true);
-
-    const dimensionScores: Record<string, number> = {};
-    for (const dim of Object.keys(currentResult.dimensionScores)) {
-      dimensionScores[dim] = currentResult.dimensionScores[dim].scoreA;
-    }
-
-    const store = useProjectStore.getState();
-    const hasCostData = store.fixedCost > 0;
-    const input: AiReportInput = {
-      totalScore: currentResult.totalA,
-      dimensionScores,
-      segmentLabel: currentResult.segment,
-      mode: store.mode,
-      projectName: store.projectName,
-    };
-
-    if (hasCostData) {
-      input.costData = {
-        fixedCost: store.fixedCost,
-        unitVariableCost: store.unitVariableCost,
-        unitPrice: store.unitPrice ?? undefined,
-        volume: store.volume ?? undefined,
-        tokenCost: store.tokenCost,
-        acquisitionCost: store.acquisitionCostPerClient,
-        targetProfit: store.targetProfit ?? undefined,
-        entityType: store.entityType,
-      };
-    }
-
-    generateReport(input);
-  }, [generateReport]);
 
   if (phase === 'result' && result) {
     return (
@@ -96,34 +53,22 @@ export default function AssessmentPage() {
         <ResultRing totalA={result.totalA} totalB={result.totalB} maxScore={110} />
         <RadarChart scores={result.dimensionScores} />
         <TierBreakdown result={result} />
-        <SegmentCard result={result} onGenerateReport={handleGenerateReport} />
+        <SegmentCard result={result} onGenerateReport={() => setShowReport(true)} />
 
-        {/* AI 深度报告 */}
-        {showReport && (
-          <AiReportCard
-            report={report}
-            segmentLabel={result.segment}
-            isFallback={isFallback}
-            loading={loading}
-            error={error}
-            onRetry={handleGenerateReport}
-          />
-        )}
+        {/* AI 深度报告 — 占位符 */}
+        {showReport && <AiReportCard />}
 
-        <AssessmentShareButton result={result} />
-
-        {/* 追问 AI — V2 彩蛋 */}
-        <View style={{
-          marginTop: '8px', padding: '14px', borderRadius: '12px',
-          textAlign: 'center', border: '1.5px dashed #edeff3',
-          background: '#fafbfc',
-        }}
+        {/* 重新测评 */}
+        <View
+          onClick={() => useAssessmentStore.getState().resetAssessment()}
+          style={{
+            marginTop: '16px', padding: '12px', borderRadius: '12px',
+            textAlign: 'center', border: '1px solid var(--border)',
+            background: 'var(--surface)',
+          }}
         >
-          <Text style={{ fontSize: FS.label, fontWeight: 600, color: '#9298a8' }}>
-            追问 AI
-          </Text>
-          <Text style={{ fontSize: '10px', color: '#b8bec8', display: 'block', marginTop: '2px' }}>
-            深度追问分析
+          <Text style={{ fontSize: '14px', color: 'var(--text-body)', fontWeight: 500 }}>
+            重新测评
           </Text>
         </View>
 

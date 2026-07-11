@@ -66,7 +66,7 @@ export default function CostStructureCard() {
             {t('roi.field_fixed_cost')} <Text style={{ color: '#d47563', fontWeight: 700 }}>{t('roi.label_required')}</Text>
           </Text>
           <View style={{ position: 'relative' }}>
-            <Input type="number" value={fcText}
+            <Input type="digit" value={fcText}
               onInput={(e) => setFcText(e.detail.value)}
               onBlur={blurFc}
               placeholder="20,000"
@@ -82,7 +82,7 @@ export default function CostStructureCard() {
               {t('roi.field_unit_cost')} <Text style={{ color: '#d47563', fontWeight: 700 }}>{t('roi.label_required')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={vcText}
+              <Input type="digit" value={vcText}
                 onInput={(e) => setVcText(e.detail.value)}
                 onBlur={blurVc}
                 placeholder="5.5"
@@ -97,7 +97,7 @@ export default function CostStructureCard() {
               {t('roi.field_token')} <Text style={{ fontSize: FS.caption, color: '#517ea8' }}>{t('roi.label_default_0')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={tkText}
+              <Input type="digit" value={tkText}
                 onInput={(e) => setTkText(e.detail.value)}
                 onBlur={blurTk}
                 placeholder="1,500"
@@ -117,7 +117,7 @@ export default function CostStructureCard() {
               {t('roi.field_token')} <Text style={{ fontSize: FS.caption, color: '#517ea8' }}>{t('roi.label_default_0')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={tkText}
+              <Input type="digit" value={tkText}
                 onInput={(e) => setTkText(e.detail.value)}
                 onBlur={blurTk}
                 placeholder={t('roi.placeholder_token')}
@@ -146,7 +146,7 @@ export default function CostStructureCard() {
               {t('roi.field_acq_per_client')} <Text style={{ fontSize: FS.caption, color: '#9298a8' }}>{t('roi.label_optional')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={acText}
+              <Input type="digit" value={acText}
                 onInput={(e) => setAcText(e.detail.value)}
                 onBlur={blurAc}
                 placeholder={t('roi.placeholder_acq')}
@@ -160,7 +160,7 @@ export default function CostStructureCard() {
               {t('roi.field_new_clients')} <Text style={{ fontSize: FS.caption, color: '#517ea8' }}>{t('roi.label_default_1')}</Text>
             </Text>
             <View style={{ position: 'relative' }}>
-              <Input type="number" value={String(store.newClientsPerMonth || '')}
+              <Input type="digit" value={String(store.newClientsPerMonth || '')}
                 onInput={(e) => store.setField('newClientsPerMonth', Number(e.detail.value))}
                 style={{ ...inputBase, color: '#d47563' }}
               />

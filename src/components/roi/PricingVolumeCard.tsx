@@ -52,7 +52,7 @@ export default function PricingVolumeCard() {
           </Text>
           <View style={{ position: 'relative' }}>
             <Input
-              type="number"
+              type="digit"
               value={priceText}
               onInput={(e) => {
                 const raw = e.detail.value;
@@ -109,7 +109,7 @@ export default function PricingVolumeCard() {
           </Text>
           <View style={{ position: 'relative' }}>
             <Input
-              type="number"
+              type="digit"
               value={store.volume != null ? String(store.volume) : ''}
               onInput={(e) => store.setField('volume', e.detail.value ? Number(e.detail.value) : null)}
               placeholder={t('roi.placeholder_derive')}

@@ -5,6 +5,7 @@
 import { create } from 'zustand';
 import Taro from '@tarojs/taro';
 import { useUserStore } from './useUserStore';
+import { taroStorage } from './storage';
 import type { CalcMode, RevenueModel, EntityType, PaymentCycle, CostFields } from '../types/calculation';
 
 // ═══════════════════════════════════════════
@@ -146,8 +147,8 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   loadProjects: () => {
     try {
-      const raw = Taro.getStorageSync(PROJECTS_KEY);
-      return raw ? (JSON.parse(raw) as SavedProject[]) : [];
+      const data = taroStorage.getItem(PROJECTS_KEY);
+      return Array.isArray(data) ? (data as SavedProject[]) : [];
     } catch {
       return [];
     }

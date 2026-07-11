@@ -3,7 +3,7 @@
  */
 import { View, Text } from '@tarojs/components';
 import Taro, { useDidShow } from '@tarojs/taro';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HomeIcon, AssessmentIcon, RoiIcon, ProfileIcon } from './TabIcons';
 
 const isH5 = Taro.getEnv() === Taro.ENV_TYPE.WEB;
@@ -28,18 +28,45 @@ function TabIcon({ path, color }: { path: string; color: string }) {
 }
 
 export default function TabBar() {
-  const [current, setCurrent] = useState('/pages/index/index');
+  const getHashPath = () => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      return window.location.hash.replace('#', '').split('?')[0];
+    }
+    return '/pages/index/index';
+  };
+
+  const [current, setCurrent] = useState(getHashPath);
+
+  // H5: 根据 URL hash 获取当前路径（hash 格式：#/pages/xxx/index）
+  const getPathFromHash = () => {
+    const hash = window.location.hash.replace('#', '');
+    return hash.split('?')[0];
+  };
+
+  // H5: 监听 hash 变化 + 初始化
+  useEffect(() => {
+    if (!isH5) return;
+    const updateCurrent = () => setCurrent(getPathFromHash());
+    updateCurrent();
+    window.addEventListener('hashchange', updateCurrent);
+    return () => window.removeEventListener('hashchange', updateCurrent);
+  }, []);
 
   useDidShow(() => {
     try {
-      const pages = Taro.getCurrentPages();
-      if (pages.length > 0) {
-        setCurrent('/' + pages[pages.length - 1].route);
+      if (isH5) {
+        setCurrent(getPathFromHash());
+      } else {
+        const pages = Taro.getCurrentPages();
+        if (pages.length > 0) {
+          setCurrent('/' + pages[pages.length - 1].route);
+        }
       }
     } catch (_) {}
   });
 
   const switchTab = (path: string) => {
+    setCurrent(path);
     Taro.switchTab({ url: path });
   };
 

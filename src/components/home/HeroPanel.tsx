@@ -30,9 +30,18 @@ export default function HeroPanel() {
           fontSize: '18px', fontWeight: 700, color: '#f0ece4',
         }}
         >
-          一人公司（OPC）罗盘
+          OPC创业罗盘
         </Text>
       </View>
+
+      {/* 副标题 */}
+      <Text style={{
+        fontSize: '12px', color: 'rgba(255,255,255,0.5)',
+        display: 'block', marginBottom: '8px',
+      }}
+      >
+        AI测评 · ROI分析 · 一人公司经营罗盘
+      </Text>
 
       {/* 标题文案 */}
       <Text style={{

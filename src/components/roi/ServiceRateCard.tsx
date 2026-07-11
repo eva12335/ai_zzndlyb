@@ -61,7 +61,7 @@ export default function ServiceRateCard({ breakEvenHourlyRate, requiredPrice }: 
       {/* 历史月薪输入 */}
       <View style={{ position: 'relative', marginBottom: '12px' }}>
         <Input
-          type="number"
+          type="digit"
           value={historicalMonthlySalary > 0 ? String(historicalMonthlySalary) : ''}
           onInput={(e) => setHistoricalMonthlySalary(e.detail.value ? Number(e.detail.value) : 0)}
           placeholder={t('roi.service_rate_salary_placeholder')}

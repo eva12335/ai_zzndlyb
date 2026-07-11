@@ -52,7 +52,7 @@ export default function TargetProfitCard({ requiredVolume, requiredPrice }: Prop
       <View style={{ marginBottom: '10px' }}>
         <View style={{ position: 'relative' }}>
           <Input
-            type="number"
+            type="digit"
             value={store.targetProfit != null ? String(store.targetProfit) : ''}
             onInput={(e) => {
               const v = e.detail.value;

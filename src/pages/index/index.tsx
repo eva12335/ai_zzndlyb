@@ -114,6 +114,16 @@ export default function IndexPage() {
         </View>
       </View>
 
+      {/* 小程序同步上线提示 */}
+      <View style={{ textAlign: 'center', paddingBottom: '8px' }}>
+        <Text style={{
+          fontSize: '10px', color: '#b0b7c3', lineHeight: '18px',
+        }}
+        >
+          微信搜「OPC创业罗盘」小程序 · 双端同步上线
+        </Text>
+      </View>
+
       <TabBar />
     </View>
   );
